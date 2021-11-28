@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "serie_id": 1,
+        "name": "Eren Jaeger",
+        "votes": 19
+    },
+    {
+        "id": 2,
+        "serie_id": 1,
+        "name": "Mikasa Akerman",
+        "votes": 7
+    },
+    {
+        "id": 3,
+        "serie_id": 1,
+        "name": "Armin Arlet",
+        "votes": 9
+    },
+    {
+        "id": 4,
+        "serie_id": 2,
+        "name": "Maeve",
+        "votes": 9
+    },
+    {
+        "id": 5,
+        "serie_id": 2,
+        "name": "Otis",
+        "votes": 5
+    },
+    {
+        "id": 6,
+        "serie_id": 2,
+        "name": "Eric",
+        "votes": 3
+    },
+    {
+        "id": 7,
+        "serie_id": 2,
+        "name": "Adam",
+        "votes": 3
+    },
+    {
+        "id": 8,
+        "serie_id": 3,
+        "name": "Angela Abar",
+        "votes": 4
+    },
+    {
+        "id": 9,
+        "serie_id": 3,
+        "name": "Will Reves",
+        "votes": 2
+    },
+    {
+        "id": 10,
+        "serie_id": 3,
+        "name": "Laurie Blake",
+        "votes": 1
+    },
+    {
+        "id": 11,
+        "serie_id": 3,
+        "name": "Wade Tillman",
+        "votes": 1
+    },
+    {
+        "id": 12,
+        "serie_id": 3,
+        "name": "Cal Abar",
+        "votes": 1
+    }
+]
