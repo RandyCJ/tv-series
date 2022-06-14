@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import series from './series.json'
 import { Link } from 'react-router-dom';
-
+import { getPosterURL } from './api/tmdb';
 
 //import listReactFiles from 'list-react-files'
 import ImageList from '@mui/material/ImageList';
@@ -16,17 +16,10 @@ export default class Series extends Component {
         series: series
     }
 
-    componentDidMount = () => {
-        const imagesPath = "/series-posters/";
-        this.state.series.forEach(serie => {
-            serie.image_path = imagesPath + serie.id.toString() + '/1.png';
-        });
-    }
-
     render() {
 
-        const onClickSeries = (name) => {
-            console.log("Selecciono " + name)
+        const onClickSeries = (serie) => {
+            console.log("Selecciono " + serie.name)
         }
 
         return (
@@ -35,12 +28,13 @@ export default class Series extends Component {
                 <br/>
                 <ImageList cols={3} sx={{ width: 600}}>
                 {this.state.series.map((item) => (
-                    <ImageListItem key={item.id} onClick={() => onClickSeries(item.name)}>
+                    <ImageListItem key={item.id} onClick={() => onClickSeries(item)}>
                     <img
-                        src={`${item.image_path}?w=248&fit=crop&auto=format`}
-                        srcSet={`${item.image_path}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                        src={`${getPosterURL(item.poster_path)}?w=248&fit=crop&auto=format`}
+                        srcSet={`${getPosterURL(item.poster_path)}?w=248&fit=crop&auto=format&dpr=2 2x`}
                         alt={item.name}
                         loading="lazy"
+                        style={{cursor:'pointer'}}
                     />
                     <ImageListItemBar
                         title={item.name}

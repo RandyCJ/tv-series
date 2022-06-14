@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 
+
 export default class MainPage extends Component {
+    
     render() {
         return (
             <div>
@@ -10,13 +12,17 @@ export default class MainPage extends Component {
                 <Link to="/series">Series</Link>
                 <br/>
                 <Link to="/estadisticas">Estadisticas</Link>
+                <br/>
+                <Link to="/nueva_serie">Agregar nueva serie</Link>
 
                 <form className="formLastDate" onSubmit={this.props.onClickUpdateLastDate}>
                     <h4>Seleccione ultima fecha de visualizacion</h4>
                     <input type="date"/>
                     <button type="submit">Actualizar</button>
                 </form>
+                
             </div>
+            
         )
     }
 }
