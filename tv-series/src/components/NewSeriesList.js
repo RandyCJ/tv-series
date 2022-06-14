@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getPosterURL } from './api/tmdb'
+import { getImageURL } from './api/tmdb'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -31,8 +31,8 @@ export default class NewSeriesList extends Component
             {arr.map((item) => (
                 <ImageListItem key={item.id} onClick={() => onClickSeries(item)}>
                 <img
-                    src={`${getPosterURL(item.poster_path)}?w=248&fit=crop&auto=format`}
-                    srcSet={`${getPosterURL(item.poster_path)}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${getImageURL(item.poster_path)}?w=248&fit=crop&auto=format`}
+                    srcSet={`${getImageURL(item.poster_path)}?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.name}
                     loading="lazy"
                     style={{cursor:'pointer'}}
