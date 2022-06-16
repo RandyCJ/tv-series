@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import seriesJSON from './series.json'
 import { Link } from 'react-router-dom';
 import { getImageURL } from './api/tmdb';
@@ -13,11 +13,9 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const Series = () =>  {
 
-    // const [series, setSeries] = useState(seriesJSON)
     const navigate = useNavigate()
     
     const onClickSeries = (serie) => {
-        // console.log("Selecciono " + serie.name);
         navigate(`/series/${serie.id}`)
     }
     

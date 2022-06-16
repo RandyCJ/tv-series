@@ -1,74 +1,112 @@
 [
     {
-        "id": 1,
+        "id": 149894,
         "serie_id": 1429,
         "name": "Eren Jaeger",
-        "votes": 19
+        "gender": 2,
+        "actor": "Yuki Kaji",
+        "votes": 19,
+        "profile_path": "/8wKdPV11IwowfwoqGqMMNt9hmp6.jpg",
+        "character_path": ""
     },
     {
-        "id": 2,
+        "id": 1224288,
         "serie_id": 1429,
         "name": "Mikasa Akerman",
-        "votes": 7
+        "gender": 1,
+        "actor": "Yui Ishikawa",
+        "votes": 7,
+        "profile_path": "/7IUIHnRDWZq71EHMdomW3AvInd1.jpg",
+        "character_path": ""
     },
     {
-        "id": 3,
+        "id": 90135,
         "serie_id": 1429,
         "name": "Armin Arlet",
-        "votes": 9
+        "gender": 2,
+        "actor": "Marina Inoue",
+        "votes": 9,
+        "profile_path": "/nQ7a3krkbea6ukw9KGvvTpMma96.jpg"
     },
     {
-        "id": 4,
+        "id": 2201315,
         "serie_id": 81356,
-        "name": "Maeve",
-        "votes": 9
+        "name": "Maeve Wiley",
+        "gender": 1,
+        "actor": "Emma Mackey",
+        "votes": 9,
+        "profile_path": "/nVcW3khbrOdCZrsmx1VeTxQGQSv.jpg"
     },
     {
-        "id": 5,
+        "id": 77996,
         "serie_id": 81356,
-        "name": "Otis",
-        "votes": 5
+        "name": "Otis Milburn",
+        "gender": 2,
+        "actor": "Asa Butterfield",
+        "votes": 5,
+        "profile_path": "/1IoQIesuvI9o1IpYZqdjBWvKhRf.jpg"
     },
     {
-        "id": 6,
+        "id": 1475239,
         "serie_id": 81356,
-        "name": "Eric",
-        "votes": 3
+        "name": "Eric Effiong",
+        "gender": 2,
+        "actor": "Ncuti Gatwa",
+        "votes": 3,
+        "profile_path": "/6qYY4cB7mgETQAITJBa72UOACbH.jpg"
     },
     {
-        "id": 7,
+        "id": 2112439,
         "serie_id": 81356,
-        "name": "Adam",
-        "votes": 3
+        "name": "Adam Groff",
+        "gender": 2,
+        "actor": "Connor Swindells",
+        "votes": 3,
+        "profile_path": "/jUY1Ayi79usRpwjMmrGVtGmWL6B.jpg"
     },
     {
-        "id": 8,
+        "id": 9788,
         "serie_id": 79788,
         "name": "Angela Abar",
-        "votes": 4
+        "gender": 1,
+        "actor": "Regina King",
+        "votes": 4,
+        "profile_path": "/3855wvuBloDkuqpdbJxz3i7p36X.jpg"
     },
     {
-        "id": 9,
+        "id": 20959,
         "serie_id": 79788,
         "name": "Will Reves",
-        "votes": 2
+        "gender": 2,
+        "actor": "Louis Gossett Jr.",
+        "votes": 2,
+        "profile_path": "/gNdTmckVFDz5M9k9zMiwCFb2cl9.jpg"
     },
     {
-        "id": 10,
+        "id": 5376,
         "serie_id": 79788,
         "name": "Laurie Blake",
-        "votes": 1
+        "gender": 1,
+        "actor": "Jean Smart",
+        "votes": 1,
+        "profile_path": "/qVNHk0tZQqoUBNHzC82tNyd4hQd.jpg"
     },
     {
-        "id": 11,
+        "id": 1462,
         "serie_id": 79788,
         "name": "Wade Tillman",
-        "votes": 1
+        "gender": 2,
+        "actor": "Tim Blake Nelson",
+        "votes": 1,
+        "profile_path": "/dcfdSmVmklb1HXHbB9kySdrl9Nq.jpg"
     },
     {
-        "id": 12,
+        "id": 1639847,
         "serie_id": 79788,
         "name": "Cal Abar",
-        "votes": 1
+        "gender": 2,
+        "actor": "Yahya Abdul-Mateen II",
+        "votes": 1,
+        "profile_path": "/aBDebGZs2pAucyaK4EhHVJGm0Xu.jpg"
     }
 ]
