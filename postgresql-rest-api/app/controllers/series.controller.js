@@ -20,7 +20,7 @@ exports.create = (req, res) => {
     poster_path: req.body.poster_path,
     wallpaper_path: req.body.wallpaper_path
   };
-  
+
   // Save Series in the database
   Series.create(series)
     .then(data => {
@@ -36,12 +36,20 @@ exports.create = (req, res) => {
 
 // Retrieve all Series from database
 exports.findAll = (req, res) => {
-  
+  Series.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving series."
+      });
+    });
 };
 
 // Find a single Series with an id
 exports.findOne = (req, res) => {
-    console.log("Recibi esta id: " + req.params.id)
   const id = req.params.id;
   Series.findByPk(id)
     .then(data => {
@@ -56,7 +64,7 @@ exports.findOne = (req, res) => {
     .catch(err => {
         console.log(err)
         res.status(500).send({
-            message: "Internal Server Error"
+            message: "Error while retrieving single series"
         });
     })
 };

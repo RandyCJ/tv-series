@@ -1,0 +1,1 @@
+export const getAllSeries = () => "http://localhost:8080/api/series"
