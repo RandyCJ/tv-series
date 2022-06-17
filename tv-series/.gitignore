@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # api
-/src/components/api/conf.json
+/src/api/conf.json

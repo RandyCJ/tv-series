@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TextField from "@mui/material/TextField";
-import { getPossibleSeries } from './api/tmdb';
+import { getPossibleSeries } from '../api/tmdb';
 import axios from 'axios'
 import NewSeriesList from './NewSeriesList';
 import { Link } from 'react-router-dom';

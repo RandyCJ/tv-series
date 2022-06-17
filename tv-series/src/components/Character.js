@@ -1,6 +1,6 @@
 import React from "react";
 import './../App.css'
-import { getImageURL } from "./api/tmdb";
+import { getImageURL } from "../api/tmdb";
 
 const Character = ({character}) => {
     const { name, actor, votes, profile_path, character_path, gender } = character

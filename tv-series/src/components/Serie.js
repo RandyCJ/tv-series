@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import series from "./series.json"
 import charactersJSON from "./characters.json"
-import { getImageURL, getCharacters } from './api/tmdb'
+import { getImageURL, getCharacters } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
 import { PaginatedList } from 'react-paginated-list'
