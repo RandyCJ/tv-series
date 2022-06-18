@@ -8,10 +8,7 @@ import Character from './Character'
 import { PaginatedList } from 'react-paginated-list'
 import axios from 'axios'
 import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
+import { getImageItem } from './ImageListItem';
 
 const renderCharacters = (characters) => {
     return (
@@ -29,7 +26,7 @@ const renderCharacters = (characters) => {
     )
 }
 
-const addCharacter = (currentActor, currentCharacter) => {
+const addCharacter = ({ currentActor, currentCharacter }) => {
     console.log(currentActor)
     console.log(currentCharacter)
 }
@@ -42,28 +39,10 @@ const renderNewCharacters = (cast) => {
                     const actor_photo = profile_path? getImageURL(profile_path) : "/notAvailable.png"
                     return (
                     roles.map((currentCharacter) => {
-                        const { character, credit_id } = currentCharacter
+                        const item = { currentActor, currentCharacter }
+                        const data = { id: currentCharacter.credit_id, image: actor_photo, name: currentCharacter.character, icon: 1 }
                         return (
-                            <ImageListItem key={credit_id} onClick={() => addCharacter(currentActor, currentCharacter)}>
-                            <img
-                                src={`${actor_photo}?w=248&fit=crop&auto=format`}
-                                srcSet={`${actor_photo}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                alt={character}
-                                loading="lazy"
-                                style={{cursor:'pointer'}}
-                            />
-                            <ImageListItemBar
-                                title={character}
-                                actionIcon={
-                                <IconButton
-                                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                    aria-label={`info about ${character}`}
-                                >
-                                    <AddIcon />
-                                </IconButton>
-                                }
-                            />
-                            </ImageListItem>
+                            getImageItem({item, data, onClickFunction: addCharacter})
                         )
                     }))
                 })}
