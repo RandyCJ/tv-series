@@ -9,16 +9,12 @@ import Series from './components/Series';
 
 export default class App extends Component {
 
-  onClickUpdateLastDate = () => {
-
-  }
-
   render() {
     return (
       <div>
         <Router>
           <Routes>
-            <Route path="/" element={<MainPage onClickUpdateLastDate={this.onClickUpdateLastDate}/>} />
+            <Route path="/" element={<MainPage />} />
             <Route path="/series/:id" element={<Serie/>} />
             <Route path="/series" element={<Series/>} />
             <Route path="/nueva_serie" element={<AddSeries/>} />

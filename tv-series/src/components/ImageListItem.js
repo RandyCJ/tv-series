@@ -21,7 +21,7 @@ export function getImageItem ({ item, data, onClickFunction }) {
                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                         aria-label={`info about ${data.name}`}
                     >
-                        { data.icon == 0? <InfoIcon /> : <AddIcon />}
+                        { data.icon === 0? <InfoIcon /> : <AddIcon />}
                     </IconButton>
                     }
                 />

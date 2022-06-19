@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import series from "./series.json"
-import charactersJSON from "./characters.json"
+// import series from "./series.json"
+// import charactersJSON from "./characters.json"
 import { getImageURL, getCharacters } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
@@ -9,6 +9,8 @@ import { PaginatedList } from 'react-paginated-list'
 import axios from 'axios'
 import ImageList from '@mui/material/ImageList';
 import { getImageItem } from './ImageListItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSeriesCharacters, updateSeriesIDLoaded } from '../store/actions/characters'
 
 const renderCharacters = (characters) => {
     return (
@@ -27,15 +29,15 @@ const renderCharacters = (characters) => {
 }
 
 const addCharacter = ({ currentActor, currentCharacter }) => {
-    console.log(currentActor)
-    console.log(currentCharacter)
+    console.log(currentCharacter.character)
+    console.log(`(${currentActor.id}, ${currentActor.gender}, '${currentActor.name}', '${currentActor.profile_path}')`)
 }
 
 const renderNewCharacters = (cast) => {
     return (
         <ImageList cols={6} sx={{ width: 1000}}>
                 {cast.map((currentActor) => {
-                    const { id, roles, gender, name, profile_path } = currentActor
+                    const { roles, profile_path } = currentActor
                     const actor_photo = profile_path? getImageURL(profile_path) : "/notAvailable.png"
                     return (
                     roles.map((currentCharacter) => {
@@ -55,9 +57,22 @@ const Serie = () => {
     const [showNewCharacters, setShowNewCharacters] = useState(false)
     const [newCharacters, setNewCharacters] = useState([])
 
+    const dispatch = useDispatch()
+    const { charactersList: charactersJSON, loadedCharactersSeries } = useSelector(state => state.characters)
+    const { seriesList: series } = useSelector(state => state.series)
     const { id } = useParams()
+
+    useEffect(() => {
+        if (!loadedCharactersSeries.includes(id)){
+            dispatch(fetchSeriesCharacters(id))
+            dispatch(updateSeriesIDLoaded(id))
+        }
+    }, [dispatch, id, loadedCharactersSeries])
+
+    // eslint-disable-next-line
     const { name, year, poster_path, wallpaper_path } = series.find(serie => serie.id == id)
-    const seriesCharacters = charactersJSON.filter(character => character.serie_id == id)
+    // eslint-disable-next-line
+    const seriesCharacters = charactersJSON.filter(character => character.series_id == id)
     seriesCharacters.sort((a, b) => b.votes - a.votes);
 
     const loadNewCharacters = async () => {
@@ -70,7 +85,7 @@ const Serie = () => {
 
     const showHideNewCharacters = () => {
         setShowNewCharacters(!showNewCharacters)
-        if (showNewCharacters && newCharacters.length == 0){
+        if (showNewCharacters && newCharacters.length === 0){
             loadNewCharacters()
         }
     }
@@ -79,9 +94,9 @@ const Serie = () => {
     return (
             <div>
                 <h1>{name} ({year})</h1><br/>
-                {/* {
-                wallpaper_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={1000}/>
-                } */}
+                {
+                wallpaper_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={100}/>
+                }
                 <div className='rowC'>
                     <img alt="poster" src={getImageURL(poster_path)} width={400}/>
                     <div>

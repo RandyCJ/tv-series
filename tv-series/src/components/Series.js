@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { getImageURL } from '../api/tmdb';
 import { useNavigate } from "react-router-dom";
 
 import ImageList from '@mui/material/ImageList';
 import { getImageItem } from './ImageListItem';
-import { fetchAllSeries } from '../store/slices/series';
+import { fetchAllSeries } from '../store/actions/series';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Series = () =>  {
 
     const dispatch = useDispatch()
     const { seriesList: series } = useSelector(state => state.series)
-
     useEffect(() => {
-        dispatch(fetchAllSeries())
-    }, [dispatch])
+        if (series.length === 0){
+            dispatch(fetchAllSeries())
+        }
+    }, [dispatch, series.length])
 
     const navigate = useNavigate()
     

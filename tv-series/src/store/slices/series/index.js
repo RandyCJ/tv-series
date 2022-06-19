@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { getAllSeries } from "../../../api/nodeAPI";
+import { setSeries } from "../../reducers/series";
+
+// reducers funtions in store/reducers
+// actions that use the reducers in store/actions
 
 export const seriesSlice = createSlice({
     name: 'series',
@@ -8,20 +10,9 @@ export const seriesSlice = createSlice({
         seriesList: []
     },
     reducers: {
-        setSeriesList: (state, action) => {
-            state.seriesList = action.payload
-        }
+        setSeriesList: setSeries
     }
 })
 
 export const { setSeriesList } = seriesSlice.actions
-
 export default seriesSlice.reducer
-
-export const fetchAllSeries = () => (dispatch) => {
-    const url = getAllSeries()
-    axios.get(url).then((response) => {
-        dispatch(setSeriesList(response.data))
-    })
-    .catch((error) => console.log(error))
-}
