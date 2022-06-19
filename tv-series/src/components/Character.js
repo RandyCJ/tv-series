@@ -3,8 +3,8 @@ import './../App.css'
 import { getImageURL } from "../api/tmdb";
 
 const Character = ({character}) => {
-    const { name, actor, votes, profile_path, gender } = character
-    const actor_photo = profile_path ? getImageURL(profile_path) : '/notAvailable.png'
+    const { name, actor, votes, profile_path, character_path, gender } = character
+    const actor_photo = character_path ? character_path : profile_path ? getImageURL(profile_path) : '/notAvailable.png'
     return (
         <div className="rowC">
             <div>
