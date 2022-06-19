@@ -15,4 +15,5 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.series = require("./series.model.js")(sequelize, Sequelize);
+db.characters = require("./characters.model.js")(sequelize, Sequelize);
 module.exports = db;

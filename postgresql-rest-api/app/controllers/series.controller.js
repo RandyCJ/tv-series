@@ -36,7 +36,11 @@ exports.create = (req, res) => {
 
 // Retrieve all Series from database
 exports.findAll = (req, res) => {
-  Series.findAll()
+  Series.findAll({
+    order: [
+      ['name', 'ASC']
+    ]
+  })
     .then(data => {
       res.send(data);
     })
