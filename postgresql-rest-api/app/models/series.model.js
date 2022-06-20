@@ -33,6 +33,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       tvmaze_id: {
         type: Sequelize.INTEGER
+      },
+      seasons: {
+        type: Sequelize.INTEGER
       }
     }, 
     {
