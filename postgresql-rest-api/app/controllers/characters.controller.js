@@ -20,6 +20,7 @@ exports.create = (req, res) => {
     gender: req.body.gender,
     actor: req.body.actor,
     profile_path: req.body.profile_path,
+    character_path: req.body.character_path,
     votes: req.body.votes,
     api_data: req.body.api_data
   };
@@ -57,3 +58,62 @@ exports.findAllOfSeries = (req, res) => {
       });
     });
 };
+
+exports.addVotes = (req, res) => {
+  Characters.findByPk(req.params.id)
+    .then(data => {
+        if (data) {
+          data.increment('votes', { by: req.body.votes })
+          res.send(data)
+        } else {
+            res.status(404).send({
+                message: `Series by id ${id} does not exist`
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            message: "Error while retrieving single series"
+        });
+    })
+};
+
+exports.substractVotes = (req, res) => {
+  Characters.findByPk(req.params.id)
+    .then(data => {
+        if (data) {
+          data.decrement('votes', { by: req.body.votes })
+          res.send(data)
+        } else {
+            res.status(404).send({
+                message: `Character by id ${id} does not exist`
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            message: "Error while retrieving single character"
+        });
+    })
+};
+
+exports.deleteCharacter = (req, res) => {
+  Characters.findByPk(req.params.id)
+    .then(data => {
+      if (data) {
+        data.destroy()
+        res.status(200).send()
+      } else {
+          res.status(404).send({
+              message: `Character by id ${id} does not exist`
+          });
+      }
+    }).catch(err => {
+      console.log(err)
+      res.status(500).send({
+          message: "Error while retrieving single character"
+      });
+  })
+}
