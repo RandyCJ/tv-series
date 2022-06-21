@@ -1,15 +1,6 @@
-import { UseFormReturn } from "react-hook-form";
-import { AddCharacterModel } from "./AddCharacterLogic";
-
-interface Props {
-  form: UseFormReturn<AddCharacterModel>;
-  onSubmit: (data: AddCharacterModel) => any;
-}
-
-const AddCharacterView = ({ form, onSubmit }: Props) => {
+const AddCharacterView = ({ form, onSubmit }) => {
   const { formState, register, handleSubmit } = form;
   const { errors, isSubmitting } = formState;
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>

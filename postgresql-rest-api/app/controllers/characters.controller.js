@@ -20,7 +20,8 @@ exports.create = (req, res) => {
     gender: req.body.gender,
     actor: req.body.actor,
     profile_path: req.body.profile_path,
-    votes: 0
+    votes: req.body.votes,
+    api_data: req.body.api_data
   };
 
   // Save Character in the database
@@ -31,7 +32,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Series."
+          err.message || "Some error occurred while creating the Character."
       });
     });
 };

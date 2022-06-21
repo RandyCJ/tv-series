@@ -6,3 +6,7 @@ export const addCharacters = (state, action) => {
 export const updateSeriesCharacters = (state, action) => {
     state.loadedCharactersSeries.push(action.payload)
 }
+
+export const addNewCharacter = (state, action) => {
+    state.charactersList.push(action.payload)
+}

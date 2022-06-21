@@ -2,14 +2,9 @@ import AddCharacterView from "./AddCharacterView";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-export interface AddCharacterModel {
-    series_id: number, 
-    actor_id: number, name: string, 
-    gender: number, actor: string, profile_path: string, 
-    character_path: string, votes: number, 
-    api_data: number
-}
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { updateCharactersList } from "../../store/actions/characters";
 
 const AddCharacterFormSchema = yup.object().shape({
     series_id: yup.number(), 
@@ -19,21 +14,22 @@ const AddCharacterFormSchema = yup.object().shape({
     api_data: yup.number()
 });
 
-interface Props {
-  defaultValues: AddCharacterModel;
-  onSubmit: (data: AddCharacterModel) => Promise<Response>;
-}
+const AddCharacterLogic = ({ defaultValues, onSubmit }) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-const AddCharacterLogic = ({ defaultValues, onSubmit }: Props) => {
-  const form = useForm<AddCharacterModel>({
+  const form = useForm({
     mode: "onSubmit",
     defaultValues,
     resolver: yupResolver(AddCharacterFormSchema)
   });
 
-  const handleSubmit = async (data: AddCharacterModel) => {
+  const handleSubmit = async (data) => {
     await onSubmit(data)
-      .then(() => form.reset(data))
+      .then((response) => {
+        dispatch(updateCharactersList(response.data))
+        navigate(-1)
+      })
       .catch((err) => console.error(err));
   };
 

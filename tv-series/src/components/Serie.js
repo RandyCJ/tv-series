@@ -43,11 +43,11 @@ const Serie = () => {
     const [showTVMazeNewCharacters, setShowTVMazeNewCharacters] = useState(true)
     const [newTVMazeCharacters, setNewTVMazeCharacters] = useState([])
 
-    const [seasonCharacters, setSeasonCharacters] = useState(0)
-    const [loadedSeasonCharacters, setLoadedSeasonCharacters] = useState(0)
+    const [seasonCharacters, setSeasonCharacters] = useState("0")
+    const [loadedSeasonCharacters, setLoadedSeasonCharacters] = useState("0")
 
     const setSeason = (e) => {
-        setSeasonCharacters(parseInt(e.target.value))
+        setSeasonCharacters(e.target.value)
     }
 
     const { charactersList: charactersJSON, loadedCharactersSeries } = useSelector(state => state.characters)
@@ -114,7 +114,10 @@ const Serie = () => {
     seriesCharacters.sort((a, b) => b.votes - a.votes);
 
     const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
-        const url = urlFunction(seriesID, seasonCharacters)
+        const url = urlFunction(seriesID, 
+            seasonCharacters === "" ? "0" : 
+            parseInt(seasonCharacters) > seasons ? seasons.toString() : 
+            seasonCharacters)
         const { data } = await axios.get(url)
         const cast = getCharactersFunction(data, seriesID)
         stateFunction1(cast)

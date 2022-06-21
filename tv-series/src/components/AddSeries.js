@@ -33,7 +33,6 @@ export default class AddSeries extends Component {
         this.setState({
             results: results
         })
-        console.log(results)
     }
 
     render() {

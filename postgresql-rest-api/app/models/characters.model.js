@@ -28,6 +28,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       votes: {
         type: Sequelize.INTEGER
+      },
+      api_data: {
+        type: Sequelize.INTEGER
       }
     }, 
     {

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getCharactersFromSeries } from "../../api/nodeAPI"
-import { addSeriesCharacters, updateLoadedSeriesCharacters } from "../slices/characters"
+import { addSeriesCharacters, updateLoadedSeriesCharacters, addNewCharacterToList } from "../slices/characters"
 
 export const fetchSeriesCharacters = (seriesID) => (dispatch) => {
     const url = getCharactersFromSeries(seriesID)
@@ -12,4 +12,8 @@ export const fetchSeriesCharacters = (seriesID) => (dispatch) => {
 
 export const updateSeriesIDLoaded = (seriesID) => (dispatch) => {
     dispatch(updateLoadedSeriesCharacters(seriesID))
+}
+
+export const updateCharactersList = (character) => dispatch => {
+    dispatch(addNewCharacterToList(character))
 }
