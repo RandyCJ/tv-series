@@ -115,6 +115,7 @@ const Serie = () => {
 
     const { name, year, poster_path, wallpaper_path, tvmaze_id, seasons } = series.find(serie => serie.id === id)
     const seriesCharacters = charactersJSON.filter(character => character.series_id === id)
+    seriesCharacters.sort((a, b) => a.id - b.id);
     seriesCharacters.sort((a, b) => b.votes - a.votes);
 
     const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {

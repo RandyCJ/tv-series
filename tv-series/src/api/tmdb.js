@@ -7,6 +7,7 @@ const mainTVMazeURL = "http://api.tvmaze.com"
 
 export const getPossibleSeries = ( title, year ) => `${mainTMDBURL}/search/tv?api_key=${api_key}&query=${title}&year=${year}`
 export const getImageURL = (posterPath) => {
+    if (posterPath === "/notAvailable.png") return posterPath
     return posterPath.charAt(0) === '/' ? `${mainImageTMDBURL}${posterPath}` : posterPath
 }
 

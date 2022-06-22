@@ -7,7 +7,6 @@ import { useContext } from "react";
 const AddCharacterAPI = () => {
 
   const { setShowAddCharacterForm, characterToAdd } = useContext(NewCharacterContext)
-  
   const data = characterToAdd
 
   const handleSubmit = async (data) => {
@@ -17,7 +16,7 @@ const AddCharacterAPI = () => {
 
   const defaultValues = { 
     series_id: data.series_id, 
-    actor_id: data.actor_id, name: data.name, 
+    actor_id: data.actor_id, name: data.name.replace(" (voice)", ""), 
     gender: data.gender, actor: data.actor, profile_path: data?.profile_path?? "", 
     character_path: data?.character_path?? "", votes: data.votes, 
     api_data: data.api_data
