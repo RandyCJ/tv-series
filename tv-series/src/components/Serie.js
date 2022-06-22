@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { getImageURL, getTVMazeCharacters, getCharactersBySeason } from '../api/tmdb'
 import './../App.css'
@@ -9,7 +9,7 @@ import ImageList from '@mui/material/ImageList';
 import { getImageItem } from './ImageListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSeriesCharactersAction, updateLoadedSeriesCharactersAction } from '../store/actions/characters'
-import { useNavigate } from "react-router-dom";
+import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
 
 const renderCharacters = (characters) => {
     return (
@@ -35,6 +35,49 @@ const renderNewCharacters = (cast) => {
     )
 }
 
+const getTVMazeCharactersData = (charactersData, series_id, onClickFunction) => {
+    var charactersInfo = []
+    for (var i=0; i<charactersData.length; i++){
+        const { person, character } = charactersData[i]
+        const actor_photo = character.image? character.image.medium : 
+                            person.image? person.image.medium : "/notAvailable.png"
+        const item = { series_id, actor_id: person.id, name: character.name, 
+                        gender: person.gender === "Female"? 1 : person.gender === "Male"? 2 : 0, 
+                        actor: person.name, profile_path: person.image? person.image.medium : null, 
+                        character_path: character.image? character.image.medium : null, votes: 0, 
+                        api_data: 2 }
+        const data = { id: character.id, image: actor_photo, name: character.name, icon: 1 }
+        const newItem = { item, data, onClickFunction: onClickFunction }
+        charactersInfo.push(newItem)
+    }
+
+    return charactersInfo
+}
+
+const getTMDBCharactersData = (charactersDataFull, series_id, onClickFunction) => {
+    const charactersData = charactersDataFull.cast
+    var charactersInfo = []
+    for (var i=0; i<charactersData.length; i++){
+        const currentActor = charactersData[i]
+        const { roles, profile_path } = currentActor
+        const actor_photo = profile_path? getImageURL(profile_path) : "/notAvailable.png"
+        for (var j=0; j<roles.length; j++){
+            const currentCharacter = roles[j]
+            const item = { series_id, actor_id: currentActor.id, name: currentCharacter.character, 
+                            gender: currentActor.gender, actor: currentActor.name, 
+                            profile_path: actor_photo, character_path: null,
+                            votes: 0, api_data: 1 }
+            const data = { id: currentCharacter.credit_id, image: actor_photo, name: currentCharacter.character, icon: 1 }
+            const newItem = { item, data, onClickFunction }
+            charactersInfo.push(newItem)
+        }
+    }
+
+    return charactersInfo
+}
+
+export const NewCharacterContext = createContext(null)
+
 const Serie = () => {
     
     const [showTMDBNewCharacters, setShowTMDBNewCharacters] = useState(true)
@@ -45,6 +88,9 @@ const Serie = () => {
 
     const [seasonCharacters, setSeasonCharacters] = useState("0")
     const [loadedSeasonCharacters, setLoadedSeasonCharacters] = useState("0")
+
+    const [showAddCharacterForm, setShowAddCharacterForm] = useState(false)
+    const [characterToAdd, setCharacterToAdd] = useState(null)
 
     const setSeason = (e) => {
         setSeasonCharacters(e.target.value)
@@ -62,51 +108,9 @@ const Serie = () => {
         }
     }, [dispatch, id, loadedCharactersSeries])
 
-
-    const getTVMazeCharactersData = (charactersData, series_id) => {
-        var charactersInfo = []
-        for (var i=0; i<charactersData.length; i++){
-            const { person, character } = charactersData[i]
-            const actor_photo = character.image? character.image.medium : 
-                                person.image? person.image.medium : "/notAvailable.png"
-            const item = { series_id, actor_id: person.id, name: character.name, 
-                            gender: person.gender === "Female"? 1 : person.gender === "Male"? 2 : 0, 
-                            actor: person.name, profile_path: person.image? person.image.medium : null, 
-                            character_path: character.image? character.image.medium : null, votes: 0, 
-                            api_data: 2 }
-            const data = { id: character.id, image: actor_photo, name: character.name, icon: 1 }
-            const newItem = { item, data, onClickFunction: addCharacter }
-            charactersInfo.push(newItem)
-        }
-    
-        return charactersInfo
-    }
-    
-    const getTMDBCharactersData = (charactersDataFull, series_id) => {
-        const charactersData = charactersDataFull.cast
-        var charactersInfo = []
-        for (var i=0; i<charactersData.length; i++){
-            const currentActor = charactersData[i]
-            const { roles, profile_path } = currentActor
-            const actor_photo = profile_path? getImageURL(profile_path) : "/notAvailable.png"
-            for (var j=0; j<roles.length; j++){
-                const currentCharacter = roles[j]
-                const item = { series_id, actor_id: currentActor.id, name: currentCharacter.character, 
-                                gender: currentActor.gender, actor: currentActor.name, 
-                                profile_path: actor_photo, character_path: null,
-                                votes: 0, api_data: 1 }
-                const data = { id: currentCharacter.credit_id, image: actor_photo, name: currentCharacter.character, icon: 1 }
-                const newItem = { item, data, onClickFunction: addCharacter }
-                charactersInfo.push(newItem)
-            }
-        }
-    
-        return charactersInfo
-    }
-
-    const navigate = useNavigate()
     const addCharacter = (character) => {
-        navigate(`/series/${id}/add_character`, { state: { character } })
+        setShowAddCharacterForm(true)
+        setCharacterToAdd(character)
     }
 
     const { name, year, poster_path, wallpaper_path, tvmaze_id, seasons } = series.find(serie => serie.id === id)
@@ -119,7 +123,7 @@ const Serie = () => {
             parseInt(seasonCharacters) > seasons ? seasons.toString() : 
             seasonCharacters)
         const { data } = await axios.get(url)
-        const cast = getCharactersFunction(data, seriesID)
+        const cast = getCharactersFunction(data, id, addCharacter)
         stateFunction1(cast)
         stateFunction2(true)
     }
@@ -133,14 +137,6 @@ const Serie = () => {
         }
     }
 
-    const toggleShowTVMaze = () => {
-        setShowTVMazeNewCharacters(false)
-    }
-
-    const toggleShowTMDB = () => {
-        setShowTMDBNewCharacters(false)
-    }
-
     const showHideNewTMDBCharacters = () => {
         setShowTMDBNewCharacters(true)
         if (newTMDBCharacters.length === 0 || loadedSeasonCharacters !== seasonCharacters){
@@ -149,6 +145,14 @@ const Serie = () => {
                 setShowTMDBNewCharacters)
             setLoadedSeasonCharacters(seasonCharacters)
         }
+    }
+
+    const toggleShowTVMaze = () => {
+        setShowTVMazeNewCharacters(false)
+    }
+
+    const toggleShowTMDB = () => {
+        setShowTMDBNewCharacters(false)
     }
 
     return (
@@ -173,6 +177,9 @@ const Serie = () => {
                 <input type="number" placeholder='Temporada' min="0" max={seasons} value={seasonCharacters} onChange={setSeason} />
                 <input type="button" value="Agregar personaje (TMDB)" onClick={showHideNewTMDBCharacters} />
                 <input type="button" value="Ocultar personajes (TMDB)" onClick={toggleShowTMDB} />
+                {
+                    showAddCharacterForm && <NewCharacterContext.Provider value={{ setShowAddCharacterForm, characterToAdd }}><AddCharacterAPI /></NewCharacterContext.Provider>
+                }
                 {
                     showTVMazeNewCharacters && renderNewCharacters(newTVMazeCharacters)
                 }

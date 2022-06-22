@@ -1,4 +1,4 @@
-const AddCharacterView = ({ form, onSubmit }) => {
+const AddCharacterView = ({ form, onSubmit, setShowAddCharacterForm }) => {
   const { formState, register, handleSubmit } = form;
   const { errors, isSubmitting } = formState;
   return (
@@ -24,8 +24,9 @@ const AddCharacterView = ({ form, onSubmit }) => {
       </div>
 
       <button disabled={isSubmitting} type="submit">
-        Submit
+        Agregar personaje
       </button>
+      <input type="button" onClick={() => setShowAddCharacterForm(false)} value={"Ocultar formulario"}/>
     </form>
   );
 };

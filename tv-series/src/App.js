@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AddSeries from './components/AddSeries';
-import AddCharacterAPI from './components/FormAddCharacter/AddCharacterAPI';
 import MainPage from './components/MainPage';
 import Serie from './components/Serie';
 
@@ -19,7 +18,6 @@ export default class App extends Component {
             <Route path="/series/:id" element={<Serie/>} />
             <Route path="/series" element={<Series/>} />
             <Route path="/nueva_serie" element={<AddSeries/>} />
-            <Route path="/series/:id/add_character" element={<AddCharacterAPI />} />
           </Routes>
           
         </Router>    

@@ -2,7 +2,6 @@ import AddCharacterView from "./AddCharacterView";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { addNewCharacterAction } from "../../store/actions/characters";
 
@@ -14,8 +13,7 @@ const AddCharacterFormSchema = yup.object().shape({
     api_data: yup.number()
 });
 
-const AddCharacterLogic = ({ defaultValues, onSubmit }) => {
-  const navigate = useNavigate()
+const AddCharacterLogic = ({ defaultValues, onSubmit, setShowAddCharacterForm }) => {
   const dispatch = useDispatch()
 
   const form = useForm({
@@ -28,12 +26,12 @@ const AddCharacterLogic = ({ defaultValues, onSubmit }) => {
     await onSubmit(data)
       .then((response) => {
         dispatch(addNewCharacterAction(response.data))
-        navigate(-1)
+        setShowAddCharacterForm(false)
       })
       .catch((err) => console.error(err));
   };
 
-  return <AddCharacterView form={form} onSubmit={handleSubmit} />;
+  return <AddCharacterView form={form} onSubmit={handleSubmit} setShowAddCharacterForm={setShowAddCharacterForm}/>;
 };
 
 export default AddCharacterLogic;

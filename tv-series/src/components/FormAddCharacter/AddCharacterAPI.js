@@ -1,13 +1,14 @@
 import AddCharacterLogic from "./AddCharacterLogic";
-import { useLocation, useParams } from 'react-router-dom';
 import { addNewCharacter } from '../../api/nodeAPI';
 import axios from "axios";
+import { NewCharacterContext } from "../Serie";
+import { useContext } from "react";
 
 const AddCharacterAPI = () => {
 
-  const data = useLocation().state.character
-  const id = parseInt(useParams().id)
-  data.series_id = id
+  const { setShowAddCharacterForm, characterToAdd } = useContext(NewCharacterContext)
+  
+  const data = characterToAdd
 
   const handleSubmit = async (data) => {
     // return async function to submit data to backend
@@ -23,7 +24,7 @@ const AddCharacterAPI = () => {
   }
 
   return (
-    <AddCharacterLogic defaultValues={defaultValues} onSubmit={handleSubmit} />
+    <AddCharacterLogic defaultValues={defaultValues} onSubmit={handleSubmit} setShowAddCharacterForm={setShowAddCharacterForm}/>
   );
 };
 
