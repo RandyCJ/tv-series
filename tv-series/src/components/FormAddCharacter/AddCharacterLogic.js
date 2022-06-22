@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { updateCharactersList } from "../../store/actions/characters";
+import { addNewCharacterAction } from "../../store/actions/characters";
 
 const AddCharacterFormSchema = yup.object().shape({
     series_id: yup.number(), 
@@ -27,7 +27,7 @@ const AddCharacterLogic = ({ defaultValues, onSubmit }) => {
   const handleSubmit = async (data) => {
     await onSubmit(data)
       .then((response) => {
-        dispatch(updateCharactersList(response.data))
+        dispatch(addNewCharacterAction(response.data))
         navigate(-1)
       })
       .catch((err) => console.error(err));

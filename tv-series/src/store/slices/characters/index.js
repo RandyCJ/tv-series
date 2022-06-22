@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addCharacters, updateSeriesCharacters, addNewCharacter } from "../../reducers/characters";
+import { addSeriesCharactersReducer, updateLoadedSeriesCharactersReducer, 
+         addNewCharacterReducer, addVotesCharacterReducer, 
+         substractVotesCharacterReducer,
+         deleteCharacterReducer } from "../../reducers/characters";
 
 // reducers funtions in store/reducers
 // actions that use the reducers in store/actions
@@ -11,11 +14,15 @@ export const charactersSlice = createSlice({
         loadedCharactersSeries: []
     },
     reducers: {
-        addSeriesCharacters: addCharacters,
-        updateLoadedSeriesCharacters: updateSeriesCharacters,
-        addNewCharacterToList: addNewCharacter
+        addSeriesCharacters: addSeriesCharactersReducer,
+        updateLoadedSeriesCharacters: updateLoadedSeriesCharactersReducer,
+        addNewCharacter: addNewCharacterReducer,
+        addVotesCharacter: addVotesCharacterReducer,
+        substractVotesCharacter: substractVotesCharacterReducer,
+        deleteCharacter: deleteCharacterReducer
     }
 })
 
-export const { addSeriesCharacters, updateLoadedSeriesCharacters, addNewCharacterToList } = charactersSlice.actions
+export const { addSeriesCharacters, updateLoadedSeriesCharacters, addNewCharacter, 
+               addVotesCharacter, substractVotesCharacter, deleteCharacter } = charactersSlice.actions
 export default charactersSlice.reducer

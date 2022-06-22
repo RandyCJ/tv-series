@@ -8,7 +8,7 @@ import axios from 'axios'
 import ImageList from '@mui/material/ImageList';
 import { getImageItem } from './ImageListItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSeriesCharacters, updateSeriesIDLoaded } from '../store/actions/characters'
+import { addSeriesCharactersAction, updateLoadedSeriesCharactersAction } from '../store/actions/characters'
 import { useNavigate } from "react-router-dom";
 
 const renderCharacters = (characters) => {
@@ -57,8 +57,8 @@ const Serie = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         if (!loadedCharactersSeries.includes(id)){
-            dispatch(fetchSeriesCharacters(id))
-            dispatch(updateSeriesIDLoaded(id))
+            dispatch(addSeriesCharactersAction(id))
+            dispatch(updateLoadedSeriesCharactersAction(id))
         }
     }, [dispatch, id, loadedCharactersSeries])
 
