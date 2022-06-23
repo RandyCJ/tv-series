@@ -20,3 +20,4 @@ export const getSeriesInfo = (seriesID) => `${mainTMDBURL}/tv/${seriesID}?api_ke
 
 // Characters from tvmaze.com (here they also have photos for the characters)
 export const getTVMazeCharacters = (seriesID, _) => `${mainTVMazeURL}/shows/${seriesID}/cast`
+export const getTVMazeShows = (query) => `${mainTVMazeURL}/search/shows?q=${query}`

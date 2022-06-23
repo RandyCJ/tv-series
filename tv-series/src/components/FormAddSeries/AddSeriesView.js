@@ -1,0 +1,75 @@
+import { getImageURL } from "../../api/tmdb";
+import { getImageItem } from "../ImageListItem";
+import './../../App.css'
+
+const AddSeriesView = ({ form, onSubmit, tvMazeSeries }) => {
+    const { formState, register, handleSubmit } = form;
+    const { errors, isSubmitting } = formState;
+    const { poster_path, wallpaper_path } = form.control._formValues
+    const poster = poster_path? getImageURL(poster_path) : "/notAvailable.png"
+    return (
+        <div>
+        <div className="rowC">
+            {/* { poster_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={150}/> } */}
+            <div>
+                { <img alt="poster" src={poster} width={200} /> }
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                <label>Nombre de la serie</label>
+                <div>
+                    <input
+                    type="text"
+                    placeholder="Nombre personaje"
+                    {...register("name")}
+                    />
+                </div>
+                <div>{errors?.name?.message}</div>
+                </div>
+
+                <div>
+                <label>Año</label>
+                <div>
+                    <input
+                    type="number"
+                    placeholder="Año"
+                    {...register("year")}
+                    />
+                </div>
+                <div>{errors?.year?.message}</div>
+                </div>
+
+                <div>
+                <label>Fecha de inicio</label>
+                <div>
+                    <input
+                    type="date"
+                    placeholder="Fecha inicio"
+                    {...register("start_date")}
+                    />
+                </div>
+                <div>{errors?.start_date?.message}</div>
+                </div>
+        
+                <div>
+                <label>TVMaze ID</label>
+                <div>
+                    <input type="number" placeholder="TVMaze ID" {...register("tvmaze_id")} />
+                </div>
+                <div>{errors?.votes?.message}</div>
+                </div>
+        
+                <button disabled={isSubmitting} type="submit">
+                Agregar serie
+                </button>
+            </form>
+        </div>
+        {tvMazeSeries.map(serie => {
+            return getImageItem(serie)
+        })}
+        </div>
+    );
+  };
+  
+  export default AddSeriesView;
+  

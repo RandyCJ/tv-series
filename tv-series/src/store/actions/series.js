@@ -1,6 +1,6 @@
 import axios from "axios"
-import { getAllSeries } from "../../api/nodeAPI"
-import { setSeriesList } from "../slices/series"
+import { addNewSeriesURL, getAllSeries } from "../../api/nodeAPI"
+import { setSeriesList, addNewSeries } from "../slices/series"
 
 export const fetchAllSeries = () => (dispatch) => {
     const url = getAllSeries()
@@ -8,4 +8,11 @@ export const fetchAllSeries = () => (dispatch) => {
         dispatch(setSeriesList(response.data))
     })
     .catch((error) => console.log(error))
+}
+
+export const addNewSeriesAction = (series) => (dispatch) => {
+    const url = addNewSeriesURL()
+    axios.post(url, series).then((response) => {
+        dispatch(addNewSeries(response.data))
+    })
 }

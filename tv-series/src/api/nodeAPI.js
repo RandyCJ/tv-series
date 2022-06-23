@@ -6,3 +6,4 @@ export const addNewCharacter = (seriesID) => `${mainURL}/api/series/${seriesID}/
 export const addVotesCharacterURL = (characterID) => `${mainURL}/api/characters/${characterID}/add_votes`
 export const substractVotesCharacterURL = (characterID) => `${mainURL}/api/characters/${characterID}/substract_votes`
 export const deleteCharacterURL = (characterID) => `${mainURL}/api/characters/${characterID}/delete`
+export const addNewSeriesURL = () => `${mainURL}/api/series`

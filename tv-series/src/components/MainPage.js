@@ -10,7 +10,7 @@ const MainPage = () => {
             <br/>
             <Link to="/estadisticas">Estadisticas</Link>
             <br/>
-            <Link to="/nueva_serie">Agregar nueva serie</Link>
+            <Link to="/buscar_serie">Agregar nueva serie</Link>
 
             <form className="formLastDate">
                 <h4>Seleccione ultima fecha de visualizacion</h4>

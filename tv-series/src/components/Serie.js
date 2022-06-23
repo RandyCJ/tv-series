@@ -44,7 +44,7 @@ const getTVMazeCharactersData = (charactersData, series_id, onClickFunction) => 
         const item = { series_id, actor_id: person.id, name: character.name, 
                         gender: person.gender === "Female"? 1 : person.gender === "Male"? 2 : 0, 
                         actor: person.name, profile_path: person.image? person.image.medium : null, 
-                        character_path: character.image? character.image.medium : null, votes: 0, 
+                        character_path: character.image? character.image.medium : null, votes: 1, 
                         api_data: 2 }
         const data = { id: character.id, image: actor_photo, name: character.name, icon: 1 }
         const newItem = { item, data, onClickFunction: onClickFunction }
@@ -66,7 +66,7 @@ const getTMDBCharactersData = (charactersDataFull, series_id, onClickFunction) =
             const item = { series_id, actor_id: currentActor.id, name: currentCharacter.character, 
                             gender: currentActor.gender, actor: currentActor.name, 
                             profile_path: actor_photo, character_path: null,
-                            votes: 0, api_data: 1 }
+                            votes: 1, api_data: 1 }
             const data = { id: currentCharacter.credit_id, image: actor_photo, name: currentCharacter.character, icon: 1 }
             const newItem = { item, data, onClickFunction }
             charactersInfo.push(newItem)
