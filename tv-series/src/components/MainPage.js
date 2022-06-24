@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import { fetchAllSeries } from '../store/actions/series';
+import { useDispatch, useSelector } from 'react-redux';
 
 const MainPage = () => {
+    const { seriesList: series } = useSelector(state => state.series)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (series.length === 0){
+            dispatch(fetchAllSeries())
+        }
+    }, [dispatch, series.length])
+
     return (
         <div>
             <Link to="/">Pagina principal</Link>

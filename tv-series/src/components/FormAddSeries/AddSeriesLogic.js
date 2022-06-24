@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { addNewSeriesAction } from "../../store/actions/series";
+import { useNavigate } from "react-router-dom";
 
 const AddSeriesFormSchema = yup.object().shape({
     id: yup.number(), 
@@ -18,6 +19,7 @@ const AddSeriesFormSchema = yup.object().shape({
 
 const AddSeriesLogic = ({ defaultValues, onSubmit, tvMazeSeries }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const form = useForm({
     mode: "onSubmit",
@@ -29,6 +31,7 @@ const AddSeriesLogic = ({ defaultValues, onSubmit, tvMazeSeries }) => {
     await onSubmit(data)
       .then((response) => {
         dispatch(addNewSeriesAction(response.data))
+        navigate('/')
       })
       .catch((err) => console.error(err));
   };

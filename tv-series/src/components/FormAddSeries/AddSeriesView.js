@@ -5,12 +5,11 @@ import './../../App.css'
 const AddSeriesView = ({ form, onSubmit, tvMazeSeries }) => {
     const { formState, register, handleSubmit } = form;
     const { errors, isSubmitting } = formState;
-    const { poster_path, wallpaper_path } = form.control._formValues
+    const { poster_path } = form.control._formValues
     const poster = poster_path? getImageURL(poster_path) : "/notAvailable.png"
     return (
         <div>
         <div className="rowC">
-            {/* { poster_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={150}/> } */}
             <div>
                 { <img alt="poster" src={poster} width={200} /> }
             </div>
@@ -64,8 +63,11 @@ const AddSeriesView = ({ form, onSubmit, tvMazeSeries }) => {
                 </button>
             </form>
         </div>
+        <br/>
+        Ingrese en el campo TVMazeID la id del show correspondiente de los que salen abajo <br/>
         {tvMazeSeries.map(serie => {
             return getImageItem(serie)
+
         })}
         </div>
     );

@@ -5,3 +5,7 @@ export const setSeries = (state, action) => {
 export const addNewSeriesReducer = (state, action) => {
     state.seriesList.push(action.payload)
 }
+
+export const switchFilteredSeriesReducer = (state, action) => {
+    state.filteredSeries = !state.filteredSeries
+}

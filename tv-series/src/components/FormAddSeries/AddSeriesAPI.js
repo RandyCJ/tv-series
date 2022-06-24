@@ -2,17 +2,17 @@ import AddSeriesLogic from "./AddSeriesLogic";
 import { addNewSeriesURL } from '../../api/nodeAPI';
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { useEffect } from "react";
 import { getTVMazeShows } from "../../api/tmdb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const buildTVMazeSeries = (series, onClickFunction) => {
     var seriesInfo = []
     for (var i=0; i<series.length; i++){
         const { show } = series[i]
         const poster = show.image? show.image.medium : "/notAvailable.png"
-        const item = { }
-        const data = { id: show.id, image: poster, name: show.name, icon: 1 }
+        const item = show.id
+        const name = `(${show.id}) ${show.name}`
+        const data = { id: show.id, image: poster, name, icon: 1 }
         const newItem = { item, data, onClickFunction: onClickFunction }
         seriesInfo.push(newItem)
     }
@@ -29,19 +29,18 @@ const AddSeriesAPI = () => {
         return axios.post(addNewSeriesURL(), data)
     };
 
-    const addTVMazeID = (tvMazeID) => {
-        data.tvmaze_id = tvMazeID
+    const addTVMazeID = (selectedSeries) => {
+        console.log(selectedSeries)
     }
 
     useEffect(() => {
         const url = getTVMazeShows(data.name)
-        console.log(url)
         axios.get(url).then((response) => {
-            const tvMazeSeries = buildTVMazeSeries(response.data)
-            console.log(tvMazeSeries)
-            setTvMazeSeries(tvMazeSeries)
-        })
+        const tvMazeSeries = buildTVMazeSeries(response.data, addTVMazeID)
+        setTvMazeSeries(tvMazeSeries)
+    })
     }, [data])
+
     
 
     const defaultValues = { 
