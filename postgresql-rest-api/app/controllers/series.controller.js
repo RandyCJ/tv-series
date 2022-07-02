@@ -77,7 +77,26 @@ exports.findOne = (req, res) => {
 
 // Update a Series by the id in the request
 exports.update = (req, res) => {
-  
+  const id = req.params.id;
+  Series.update(req.body, {
+    where: { id: id }
+  })
+  .then(num => {
+    if (num == 1) {
+      res.send({
+        message: "Series was updated successfully."
+      });
+    } else {
+      res.send({
+        message: `Cannot update Series with id=${id}.`
+      });
+    }
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: "Error updating Series with id=" + id
+    });
+  });
 };
 
 // Delete a Series with the specified id in the request
@@ -85,7 +104,3 @@ exports.delete = (req, res) => {
   
 };
 
-// Find all unfinished Series
-exports.findAllUnfinished = (req, res) => {
-  
-};
