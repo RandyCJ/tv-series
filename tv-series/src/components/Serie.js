@@ -10,6 +10,8 @@ import { getImageItem } from './ImageListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSeriesCharactersAction, updateLoadedSeriesCharactersAction } from '../store/actions/characters'
 import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
+import FinishSeriesAPI from './FormFinishSeries/FinishSeriesAPI'
+import { updateLastSeenEpisode } from '../store/actions/series'
 
 const renderCharacters = (characters) => {
     return (
@@ -77,6 +79,7 @@ const getTMDBCharactersData = (charactersDataFull, series_id, onClickFunction) =
 }
 
 export const NewCharacterContext = createContext(null)
+export const UpdateSeriesContext = createContext(null)
 
 const Serie = () => {
     
@@ -91,6 +94,14 @@ const Serie = () => {
 
     const [showAddCharacterForm, setShowAddCharacterForm] = useState(false)
     const [characterToAdd, setCharacterToAdd] = useState(null)
+
+    const [showFinishDateForm, setShowFinishDateForm] = useState(false)
+
+    
+
+    const onClickShowFinishSeriesForm = () => {
+        setShowFinishDateForm(true)
+    }
 
     const setSeason = (e) => {
         setSeasonCharacters(e.target.value)
@@ -113,10 +124,22 @@ const Serie = () => {
         setCharacterToAdd(character)
     }
 
-    const { name, year, poster_path, wallpaper_path, tvmaze_id, seasons } = series.find(serie => serie.id === id)
+    const { name, year, start_date, finish_date, last_ep, num_last_ep, last_seen_ep, 
+        poster_path, wallpaper_path, tvmaze_id, seasons } = series.find(serie => serie.id === id)
     const seriesCharacters = charactersJSON.filter(character => character.series_id === id)
     seriesCharacters.sort((a, b) => a.id - b.id);
     seriesCharacters.sort((a, b) => b.votes - a.votes);
+
+    const [lastSeenEpisode, setLastSeenEpisode] = useState(last_seen_ep)
+    const [numLastSeenEpisode, setNumLastSeenEpisode] = useState(num_last_ep)
+
+    const onChangeLastSeenEpisode = (e) => {
+        setLastSeenEpisode(e.target.value)
+    }
+
+    const onChangeNumLastSeenEpisode = (e) => {
+        setNumLastSeenEpisode(e.target.value)
+    }
 
     const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
         const url = urlFunction(seriesID, 
@@ -156,12 +179,22 @@ const Serie = () => {
         setShowTMDBNewCharacters(false)
     }
 
+    const onClickUpdateLastSeenEpisode = () => {
+        dispatch(updateLastSeenEpisode({id, last_seen_ep: lastSeenEpisode, num_last_ep: numLastSeenEpisode}))
+    }
+
     return (
             <div>
                 <h1>{name} ({year})</h1><br/>
                 {
                 wallpaper_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={100}/>
                 }
+                <br/>Fecha inicio: {start_date}<br/>
+                Fecha final: { finish_date?? "No terminada"}<br/>
+                { finish_date? `Último capítulo emitido al ponerse al día: ${last_ep} (${num_last_ep})` : "" }<br/>
+                Último capítulo visto: <input value={lastSeenEpisode} onChange={onChangeLastSeenEpisode} /> <br/>
+                Número último capítulo visto: <input value={numLastSeenEpisode} onChange={onChangeNumLastSeenEpisode} /> <br/>
+                <input type="button" value="Actualizar ultimos capitulos vistos" onClick={onClickUpdateLastSeenEpisode} /><br/>
                 <div className='rowC'>
                     <img alt="poster" src={getImageURL(poster_path)} width={400}/>
                     <div>
@@ -173,6 +206,11 @@ const Serie = () => {
                         />
                     </div>
                 </div>
+                <input type="button" value="Marcar como finalizado" onClick={onClickShowFinishSeriesForm} /><br />
+                {
+                    showFinishDateForm && <UpdateSeriesContext.Provider value={{ id, setShowFinishDateForm }}><FinishSeriesAPI /></UpdateSeriesContext.Provider>
+                }
+
                 <input type="button" value="Agregar personaje (TVMaze)" onClick={showHideNewTVMazeCharacters} />
                 <input type="button" value="Ocultar personajes (TVMaze)" onClick={toggleShowTVMaze} /><br/>
                 <input type="number" placeholder='Temporada' min="0" max={seasons} value={seasonCharacters} onChange={setSeason} />

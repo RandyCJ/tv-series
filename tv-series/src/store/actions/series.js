@@ -1,6 +1,6 @@
 import axios from "axios"
-import { getAllSeries } from "../../api/nodeAPI"
-import { setSeriesList, addNewSeries, switchFilteredSeries } from "../slices/series"
+import { getAllSeries, updateSeriesURL } from "../../api/nodeAPI"
+import { setSeriesList, addNewSeries, switchFilteredSeries, updateSeries } from "../slices/series"
 
 export const fetchAllSeries = () => (dispatch) => {
     const url = getAllSeries()
@@ -16,4 +16,16 @@ export const addNewSeriesAction = (series) => (dispatch) => {
 
 export const switchFilteredSeriesAction = () => (dispatch) => {
     dispatch(switchFilteredSeries())
+}
+
+export const updateSeriesAction = (series) => (dispatch) => {
+    dispatch(updateSeries(series))
+}
+
+export const updateLastSeenEpisode = (series) => dispatch => {
+    const url = updateSeriesURL(series.id)
+    axios.put(url, series).then(() => {
+        dispatch(updateSeries(series))
+    })
+    .catch((error) => console.log(error))
 }
