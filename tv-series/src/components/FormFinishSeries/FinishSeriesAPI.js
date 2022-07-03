@@ -5,11 +5,12 @@ import { useContext } from "react";
 import axios from "axios";
 
 const FinishSeriesAPI = () => {
-    const { id, setShowFinishDateForm } = useContext(UpdateSeriesContext)
+    const { id, setShowFinishDateForm, setLastSeenEpisode, setNumLastSeenEpisode } = useContext(UpdateSeriesContext)
 
     const handleSubmit = async (data) => {
         // return async function to submit data to backend
         data.last_seen_ep = data.last_ep
+        data['num_last_seen_ep'] = data.num_last_ep
         data.finish_date = data.finish_date.toISOString().substring(0,10)
         return axios.put(updateSeriesURL(id), data)
     };
@@ -27,7 +28,9 @@ const FinishSeriesAPI = () => {
     }
 
     return (
-        <FinishSeriesLogic defaultValues={defaultValues} onSubmit={handleSubmit} setShowFinishDateForm={setShowFinishDateForm} />
+        <FinishSeriesLogic defaultValues={defaultValues} onSubmit={handleSubmit} 
+            setShowFinishDateForm={setShowFinishDateForm} setLastSeenEpisode={setLastSeenEpisode} 
+            setNumLastSeenEpisode={setNumLastSeenEpisode} />
     );
 };
 

@@ -13,21 +13,6 @@ import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
 import FinishSeriesAPI from './FormFinishSeries/FinishSeriesAPI'
 import { updateLastSeenEpisode } from '../store/actions/series'
 
-const renderCharacters = (characters) => {
-    return (
-    <div>
-        {
-            characters.map((currentCharacter) => {
-                return (
-                    <div key={currentCharacter.id}>
-                        <Character character={currentCharacter} />
-                    </div>
-                )
-            })
-        }
-    </div>
-    )
-}
 
 const renderNewCharacters = (cast) => {
     return (
@@ -94,6 +79,7 @@ const Serie = () => {
 
     const [showAddCharacterForm, setShowAddCharacterForm] = useState(false)
     const [characterToAdd, setCharacterToAdd] = useState(null)
+    const [isCharacterFromScratch, setIsCharacterFromScratch] = useState(false)
 
     const [showFinishDateForm, setShowFinishDateForm] = useState(false)
 
@@ -110,7 +96,7 @@ const Serie = () => {
     const { charactersList: charactersJSON, loadedCharactersSeries } = useSelector(state => state.characters)
     const { seriesList: series } = useSelector(state => state.series)
     const id = parseInt(useParams().id)
-    
+
     const dispatch = useDispatch()
     useEffect(() => {
         if (!loadedCharactersSeries.includes(id)){
@@ -122,16 +108,24 @@ const Serie = () => {
     const addCharacter = (character) => {
         setShowAddCharacterForm(true)
         setCharacterToAdd(character)
+        setIsCharacterFromScratch(false)
+    }
+
+    const addCharacterFromScratch = () => {
+        const newCharacter = { name: "", series_id: id, api_data: 0}
+        setShowAddCharacterForm(true)
+        setCharacterToAdd(newCharacter)
+        setIsCharacterFromScratch(true)
     }
 
     const { name, year, start_date, finish_date, last_ep, num_last_ep, last_seen_ep, 
-        poster_path, wallpaper_path, tvmaze_id, seasons } = series.find(serie => serie.id === id)
+        poster_path, wallpaper_path, tvmaze_id, seasons, num_last_seen_ep, total_votes } = series.find(serie => serie.id === id)
     const seriesCharacters = charactersJSON.filter(character => character.series_id === id)
     seriesCharacters.sort((a, b) => a.id - b.id);
     seriesCharacters.sort((a, b) => b.votes - a.votes);
 
-    const [lastSeenEpisode, setLastSeenEpisode] = useState(last_seen_ep)
-    const [numLastSeenEpisode, setNumLastSeenEpisode] = useState(num_last_ep)
+    const [lastSeenEpisode, setLastSeenEpisode] = useState(last_seen_ep?? "")
+    const [numLastSeenEpisode, setNumLastSeenEpisode] = useState(num_last_seen_ep?? "")
 
     const onChangeLastSeenEpisode = (e) => {
         setLastSeenEpisode(e.target.value)
@@ -139,6 +133,22 @@ const Serie = () => {
 
     const onChangeNumLastSeenEpisode = (e) => {
         setNumLastSeenEpisode(e.target.value)
+    }
+
+    const renderCharacters = (characters) => {
+        return (
+        <div>
+            {
+                characters.map((currentCharacter) => {
+                    return (
+                        <div key={currentCharacter.id}>
+                            <Character character={currentCharacter} seriesID={id}/>
+                        </div>
+                    )
+                })
+            }
+        </div>
+        )
     }
 
     const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
@@ -180,7 +190,7 @@ const Serie = () => {
     }
 
     const onClickUpdateLastSeenEpisode = () => {
-        dispatch(updateLastSeenEpisode({id, last_seen_ep: lastSeenEpisode, num_last_ep: numLastSeenEpisode}))
+        dispatch(updateLastSeenEpisode({id, last_seen_ep: lastSeenEpisode, num_last_seen_ep: numLastSeenEpisode}))
     }
 
     return (
@@ -193,12 +203,12 @@ const Serie = () => {
                 Fecha final: { finish_date?? "No terminada"}<br/>
                 { finish_date? `Último capítulo emitido al ponerse al día: ${last_ep} (${num_last_ep})` : "" }<br/>
                 Último capítulo visto: <input value={lastSeenEpisode} onChange={onChangeLastSeenEpisode} /> <br/>
-                Número último capítulo visto: <input value={numLastSeenEpisode} onChange={onChangeNumLastSeenEpisode} /> <br/>
+                Número último capítulo visto: <input value={numLastSeenEpisode} onChange={onChangeNumLastSeenEpisode} type="number"/> <br/>
                 <input type="button" value="Actualizar ultimos capitulos vistos" onClick={onClickUpdateLastSeenEpisode} /><br/>
                 <div className='rowC'>
                     <img alt="poster" src={getImageURL(poster_path)} width={400}/>
                     <div>
-                        <h3>Personajes</h3><br/>
+                        <h3>Personajes (votos totales: {total_votes})</h3><br/>
                         <PaginatedList
                             list={seriesCharacters}
                             itemsPerPage={3}
@@ -206,9 +216,9 @@ const Serie = () => {
                         />
                     </div>
                 </div>
-                <input type="button" value="Marcar como finalizado" onClick={onClickShowFinishSeriesForm} /><br />
+                <input type="button" value="Marcar como finalizado" onClick={onClickShowFinishSeriesForm} /><input type="button" value="Agregar personaje" onClick={addCharacterFromScratch}/><br />
                 {
-                    showFinishDateForm && <UpdateSeriesContext.Provider value={{ id, setShowFinishDateForm }}><FinishSeriesAPI /></UpdateSeriesContext.Provider>
+                    showFinishDateForm && <UpdateSeriesContext.Provider value={{ id, setShowFinishDateForm, setLastSeenEpisode, setNumLastSeenEpisode }}><FinishSeriesAPI /></UpdateSeriesContext.Provider>
                 }
 
                 <input type="button" value="Agregar personaje (TVMaze)" onClick={showHideNewTVMazeCharacters} />
@@ -217,7 +227,7 @@ const Serie = () => {
                 <input type="button" value="Agregar personaje (TMDB)" onClick={showHideNewTMDBCharacters} />
                 <input type="button" value="Ocultar personajes (TMDB)" onClick={toggleShowTMDB} />
                 {
-                    showAddCharacterForm && <NewCharacterContext.Provider value={{ setShowAddCharacterForm, characterToAdd }}><AddCharacterAPI /></NewCharacterContext.Provider>
+                    showAddCharacterForm && <NewCharacterContext.Provider value={{ setShowAddCharacterForm, characterToAdd, isCharacterFromScratch }}><AddCharacterAPI /></NewCharacterContext.Provider>
                 }
                 {
                     showTVMazeNewCharacters && renderNewCharacters(newTVMazeCharacters)

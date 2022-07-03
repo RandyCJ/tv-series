@@ -4,6 +4,7 @@ import { addVotesCharacterURL, substractVotesCharacterURL,
 import { addSeriesCharacters, updateLoadedSeriesCharacters, 
          addNewCharacter, addVotesCharacter, 
          substractVotesCharacter, deleteCharacter } from "../slices/characters"
+import { updateTotalCharacterVotes } from "../slices/series"
 
 export const addSeriesCharactersAction = (seriesID) => (dispatch) => {
     const url = getCharactersFromSeries(seriesID)
@@ -21,23 +22,26 @@ export const addNewCharacterAction = (character) => dispatch => {
     dispatch(addNewCharacter(character))
 }
 
-export const addVotesToCharacterAction = (characterID, votes) => dispatch => {
+export const addVotesToCharacterAction = (characterID, votes, seriesID) => dispatch => {
     const url = addVotesCharacterURL(characterID)
     axios.put(url, { votes }).then(() => {
         dispatch(addVotesCharacter({ id: characterID, votes }))
+        dispatch(updateTotalCharacterVotes({ seriesID, votes, type: 0 }))
     })
 }
 
-export const substractVotesToCharacterAction = (characterID, votes) => dispatch => {
+export const substractVotesToCharacterAction = (characterID, votes, seriesID) => dispatch => {
     const url = substractVotesCharacterURL(characterID)
     axios.put(url, { votes }).then(() => {
         dispatch(substractVotesCharacter({ id: characterID, votes }))
+        dispatch(updateTotalCharacterVotes({ seriesID, votes, type: 1 }))
     })
 }
 
-export const deleteCharacterAction = (characterID) => dispatch => {
+export const deleteCharacterAction = (characterID, votes, seriesID) => dispatch => {
     const url = deleteCharacterURL(characterID)
     axios.delete(url).then(() => {
         dispatch(deleteCharacter(characterID))
+        dispatch(updateTotalCharacterVotes({ seriesID, votes, type: 1 }))
     })
 }

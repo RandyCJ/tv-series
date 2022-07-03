@@ -47,7 +47,7 @@ const AddSeriesAPI = () => {
         id: data.id, 
         name: data.name?? "", 
         year: data.year?? null,
-        start_date: data.start_date?? "",
+        start_date: null,
         poster_path: data?.poster_path?? "",
         wallpaper_path: data?.wallpaper_path?? "",
         tvmaze_id: data.tvmaze_id?? null,

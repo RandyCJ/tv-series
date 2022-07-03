@@ -7,7 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { addVotesToCharacterAction, deleteCharacterAction, substractVotesToCharacterAction } from "../store/actions/characters";
 import { useDispatch } from 'react-redux';
 
-const Character = ({character}) => {
+const Character = ({ character, seriesID }) => {
     const { id, name, actor, votes, profile_path, character_path, gender } = character
     const actor_photo = character_path ? character_path : profile_path ? getImageURL(profile_path) : '/notAvailable.png'
 
@@ -20,15 +20,15 @@ const Character = ({character}) => {
     const dispatch = useDispatch()
 
     const addVotes = () => {
-        dispatch(addVotesToCharacterAction(id, parseInt(newVotes)))
+        dispatch(addVotesToCharacterAction(id, parseInt(newVotes), seriesID))
     }
 
     const substractVotes = () => {
-        dispatch(substractVotesToCharacterAction(id, parseInt(newVotes)))
+        dispatch(substractVotesToCharacterAction(id, parseInt(newVotes), seriesID))
     }
 
     const deleteCharacter = () => {
-        dispatch(deleteCharacterAction(id))
+        dispatch(deleteCharacterAction(id, votes, seriesID))
     }
 
     return (

@@ -36,6 +36,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       seasons: {
         type: Sequelize.INTEGER
+      },
+      num_last_seen_ep: {
+        type: Sequelize.INTEGER
       }
     }, 
     {

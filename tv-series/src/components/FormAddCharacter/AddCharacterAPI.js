@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 const AddCharacterAPI = () => {
 
-  const { setShowAddCharacterForm, characterToAdd } = useContext(NewCharacterContext)
+  const { setShowAddCharacterForm, characterToAdd, isCharacterFromScratch } = useContext(NewCharacterContext)
   const data = characterToAdd
 
   const handleSubmit = async (data) => {
@@ -23,7 +23,7 @@ const AddCharacterAPI = () => {
   }
 
   return (
-    <AddCharacterLogic defaultValues={defaultValues} onSubmit={handleSubmit} setShowAddCharacterForm={setShowAddCharacterForm}/>
+    <AddCharacterLogic defaultValues={defaultValues} onSubmit={handleSubmit} setShowAddCharacterForm={setShowAddCharacterForm} isCharacterFromScratch={isCharacterFromScratch}/>
   );
 };
 

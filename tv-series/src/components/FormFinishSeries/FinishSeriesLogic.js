@@ -13,7 +13,7 @@ const FinishSeriesFormSchema = yup.object().shape({
     last_seen_ep: yup.string(), 
 });
 
-const FinishSeriesLogic = ({ defaultValues, onSubmit, setShowFinishDateForm }) => {
+const FinishSeriesLogic = ({ defaultValues, onSubmit, setShowFinishDateForm, setLastSeenEpisode, setNumLastSeenEpisode }) => {
   const dispatch = useDispatch()
 
   const form = useForm({
@@ -25,6 +25,10 @@ const FinishSeriesLogic = ({ defaultValues, onSubmit, setShowFinishDateForm }) =
   const handleSubmit = async (data) => {
     await onSubmit(data)
       .then(() => {
+        data.last_seen_ep = data.last_ep
+        data['num_last_seen_ep'] = data.num_last_ep
+        setLastSeenEpisode(data.last_ep)
+        setNumLastSeenEpisode(data.num_last_ep)
         dispatch(updateSeriesAction(data))
         setShowFinishDateForm(false)
       })

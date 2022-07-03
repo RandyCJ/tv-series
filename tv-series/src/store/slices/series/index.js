@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { setSeries, addNewSeriesReducer, switchFilteredSeriesReducer, updateSeriesReducer } from "../../reducers/series";
+import { setSeries, addNewSeriesReducer, switchFilteredSeriesReducer, updateSeriesReducer, updateTotalCharacterVotesReducer } from "../../reducers/series";
 
 // reducers funtions in store/reducers
 // actions that use the reducers in store/actions
@@ -14,9 +14,10 @@ export const seriesSlice = createSlice({
         setSeriesList: setSeries,
         addNewSeries: addNewSeriesReducer,
         switchFilteredSeries: switchFilteredSeriesReducer,
-        updateSeries: updateSeriesReducer
+        updateSeries: updateSeriesReducer,
+        updateTotalCharacterVotes: updateTotalCharacterVotesReducer
     }
 })
 
-export const { setSeriesList, addNewSeries, switchFilteredSeries, updateSeries } = seriesSlice.actions
+export const { setSeriesList, addNewSeries, switchFilteredSeries, updateSeries, updateTotalCharacterVotes } = seriesSlice.actions
 export default seriesSlice.reducer

@@ -1,3 +1,4 @@
+const { sequelize } = require("../models");
 const db = require("../models");
 const Series = db.series;
 const Op = db.Sequelize.Op;
@@ -38,13 +39,10 @@ exports.create = (req, res) => {
 
 // Retrieve all Series from database
 exports.findAll = (req, res) => {
-  Series.findAll({
-    order: [
-      ['name', 'ASC']
-    ]
-  })
+  sequelize.query('select s.*, cast(sum(c.votes) as int) total_votes \
+    from series s left join characters c on s.id = c.series_id group by s.id order by s.name asc')
     .then(data => {
-      res.send(data);
+      res.send(data[0]);
     })
     .catch(err => {
       res.status(500).send({

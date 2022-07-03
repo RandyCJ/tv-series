@@ -10,7 +10,7 @@ const AddSeriesFormSchema = yup.object().shape({
     id: yup.number(), 
     name: yup.string(), 
     year: yup.number(),
-    start_date: yup.date(),
+    start_date: yup.date().nullable().default(null),
     poster_path: yup.string(),
     wallpaper_path: yup.string(),
     tvmaze_id: yup.number(),
