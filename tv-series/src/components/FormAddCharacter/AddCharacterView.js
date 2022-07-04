@@ -36,6 +36,18 @@ const AddCharacterView = ({ form, onSubmit, setShowAddCharacterForm, isCharacter
       </div>
 
       <div hidden={!isCharacterFromScratch}>
+        <label>ID del Actor o actriz</label>
+        <div>
+          <input
+            type="text"
+            placeholder="ID actor"
+            {...register("actor_id")}
+          />
+        </div>
+        <div>{errors?.actor_id?.message}</div>
+      </div>
+
+      <div hidden={!isCharacterFromScratch}>
         <label>Género</label>
         <div>
           <select {...register("gender")}>
@@ -69,6 +81,18 @@ const AddCharacterView = ({ form, onSubmit, setShowAddCharacterForm, isCharacter
           />
         </div>
         <div>{errors?.profile_path?.message}</div>
+      </div>
+
+      <div hidden={!isCharacterFromScratch}>
+        <label>Fuente de información</label>
+        <div>
+          <select {...register("api_data")}>
+            <option value="0">Otro</option>
+            <option value="1">themoviedb.org</option>
+            <option value="2">tvmaze.com</option>
+          </select>
+        </div>
+        <div>{errors?.api_data?.message}</div>
       </div>
 
       <button disabled={isSubmitting} type="submit">
