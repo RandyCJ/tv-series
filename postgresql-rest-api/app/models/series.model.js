@@ -39,6 +39,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       num_last_seen_ep: {
         type: Sequelize.INTEGER
+      },
+      finale_year: {
+        type: Sequelize.INTEGER
       }
     }, 
     {

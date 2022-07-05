@@ -21,7 +21,8 @@ exports.create = (req, res) => {
     poster_path: req.body.poster_path,
     wallpaper_path: req.body.wallpaper_path,
     tvmaze_id: req.body.tvmaze_id,
-    seasons: req.body.seasons
+    seasons: req.body.seasons,
+    finale_year: req.body.finale_year
   };
 
   // Save Series in the database

@@ -8,6 +8,12 @@ export const addNewSeriesReducer = (state, action) => {
 
 export const switchFilteredSeriesReducer = (state, action) => {
     state.filteredSeries = !state.filteredSeries
+    state.unfinishedSeries = false
+}
+
+export const switchUnfinishedSeriesReducer = (state, action) => {
+    state.unfinishedSeries = !state.unfinishedSeries
+    state.filteredSeries = false
 }
 
 export const updateSeriesReducer = (state, action) => {

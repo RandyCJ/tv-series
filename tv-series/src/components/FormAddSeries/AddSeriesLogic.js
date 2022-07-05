@@ -13,8 +13,9 @@ const AddSeriesFormSchema = yup.object().shape({
     start_date: yup.date().nullable().default(null),
     poster_path: yup.string(),
     wallpaper_path: yup.string(),
-    tvmaze_id: yup.number(),
-    seasons: yup.number()
+    tvmaze_id: yup.number().nullable().default(null),
+    seasons: yup.number(),
+    finale_year: yup.number().nullable().default(null)
 });
 
 const AddSeriesLogic = ({ defaultValues, onSubmit, tvMazeSeries }) => {

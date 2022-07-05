@@ -51,7 +51,8 @@ const AddSeriesAPI = () => {
         poster_path: data?.poster_path?? "",
         wallpaper_path: data?.wallpaper_path?? "",
         tvmaze_id: data.tvmaze_id?? null,
-        seasons: data.seasons?? null
+        seasons: data.seasons?? null,
+        finale_year: data.finale_year?? null
     }
 
     return (

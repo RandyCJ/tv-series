@@ -10,6 +10,11 @@ const buildSeriesObject = async (serie) => {
     const { data } = await axios.get(url)
     const currentSeason = data.seasons? data.seasons.slice(-1)[0].season_number : null
     const year = serie.first_air_date.slice(0, 4)
+    var finale_year = null
+    if (data.status !== "Returning Series" && !data.in_production){
+        finale_year = data.last_air_date.slice(0, 4)
+    }
+
     const currentSeries = {
         id: serie.id,
         name: serie.name,
@@ -17,7 +22,8 @@ const buildSeriesObject = async (serie) => {
         start_date: "",
         poster_path: serie.poster_path,
         wallpaper_path: serie.backdrop_path,
-        seasons: currentSeason
+        seasons: currentSeason,
+        finale_year
     }
     return currentSeries
 }

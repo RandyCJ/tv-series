@@ -27,15 +27,27 @@ const AddSeriesView = ({ form, onSubmit, tvMazeSeries }) => {
                 </div>
 
                 <div>
-                <label>Año</label>
+                <label>Año de inicio</label>
                 <div>
                     <input
                     type="number"
-                    placeholder="Año"
+                    placeholder="Año inicio"
                     {...register("year")}
                     />
                 </div>
                 <div>{errors?.year?.message}</div>
+                </div>
+
+                <div>
+                <label>Año final</label>
+                <div>
+                    <input
+                    type="number"
+                    placeholder="Año final"
+                    {...register("finale_year")}
+                    />
+                </div>
+                <div>{errors?.finale_year?.message}</div>
                 </div>
 
                 <div>

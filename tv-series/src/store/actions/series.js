@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getAllSeries, updateSeriesURL } from "../../api/nodeAPI"
-import { setSeriesList, addNewSeries, switchFilteredSeries, updateSeries } from "../slices/series"
+import { setSeriesList, addNewSeries, switchFilteredSeries, updateSeries, switchUnfinishedSeries } from "../slices/series"
 
 export const fetchAllSeries = () => (dispatch) => {
     const url = getAllSeries()
@@ -18,6 +18,10 @@ export const switchFilteredSeriesAction = () => (dispatch) => {
     dispatch(switchFilteredSeries())
 }
 
+export const switchUnfinishedSeriesAction = () => dispatch => {
+    dispatch(switchUnfinishedSeries())
+}
+
 export const updateSeriesAction = (series) => (dispatch) => {
     dispatch(updateSeries(series))
 }
@@ -29,3 +33,4 @@ export const updateLastSeenEpisode = (series) => dispatch => {
     })
     .catch((error) => console.log(error))
 }
+
