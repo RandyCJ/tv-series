@@ -8,3 +8,4 @@ export const substractVotesCharacterURL = (characterID) => `${mainURL}/api/chara
 export const deleteCharacterURL = (characterID) => `${mainURL}/api/characters/${characterID}/delete`
 export const addNewSeriesURL = () => `${mainURL}/api/series`
 export const updateSeriesURL = (seriesID) => `${mainURL}/api/series/${seriesID}`
+export const getLastDateURL = () => `${mainURL}/api/stats/last_date`
