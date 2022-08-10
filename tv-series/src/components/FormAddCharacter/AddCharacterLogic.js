@@ -8,7 +8,7 @@ import { updateTotalCharacterVotes } from "../../store/slices/series";
 
 const AddCharacterFormSchema = yup.object().shape({
     series_id: yup.number(), 
-    actor_id: yup.number(), name: yup.string(), 
+    actor_id: yup.number().nullable().default(null), name: yup.string(), 
     gender: yup.number(), actor: yup.string(), profile_path: yup.string(), 
     character_path: yup.string(), votes: yup.number(), 
     api_data: yup.number()

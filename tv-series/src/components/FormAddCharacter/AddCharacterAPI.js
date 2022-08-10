@@ -16,7 +16,7 @@ const AddCharacterAPI = () => {
 
   const defaultValues = { 
     series_id: data.series_id, 
-    actor_id: data.actor_id, name: data.name.replace(" (voice)", ""), 
+    actor_id: data.actor_id?? null, name: data.name.replace(" (voice)", ""), 
     gender: data.gender, actor: data.actor, profile_path: data?.profile_path?? "", 
     character_path: data?.character_path?? "", votes: data.votes, 
     api_data: data.api_data
