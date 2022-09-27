@@ -310,18 +310,32 @@ def menuTopSeries(con):
         print("4. Días desde que finalizó la serie")
         print("0. Salir")
         eleccion = int(input("Ingrese su elección: "))
+        if eleccion not in [1, 2, 3, 4]:
+            return
+
+        if eleccion in [1, 2]:
+            tipo_orden = input("Quiere ordenar por fecha de inicio? y/n: ")
+        else: 
+            tipo_orden = "n"
+
+        dict_orden = {1: 5, 2: 4, 3: 7, 4: 8}
+
+        if tipo_orden == "y":
+            series_ordenadas = sorted(listaSeries, key=operator.itemgetter(7), reverse=True)
+        else:
+            series_ordenadas = sorted(listaSeries, key=operator.itemgetter(dict_orden[eleccion]), reverse=True)
         
         if eleccion == 1:
-            topPromedio(sorted(listaSeries, key=operator.itemgetter(5), reverse=True))
+            topPromedio(series_ordenadas)
         
         elif eleccion == 2:
-            topDiasTotales(sorted(listaSeries, key=operator.itemgetter(4), reverse=True))
+            topDiasTotales(series_ordenadas)
         
         elif eleccion == 3:
-            topDiasInicio(sorted(listaSeries, key=operator.itemgetter(7), reverse=True))
+            topDiasInicio(series_ordenadas)
         
         elif eleccion == 4:
-            topDiasFinal(sorted(listaSeries, key=operator.itemgetter(8), reverse=True))
+            topDiasFinal(series_ordenadas)
         
 
 def topVotosPersonajes(con):
