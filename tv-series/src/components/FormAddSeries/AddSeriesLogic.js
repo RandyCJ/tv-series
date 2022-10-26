@@ -10,15 +10,15 @@ const AddSeriesFormSchema = yup.object().shape({
     id: yup.number(), 
     name: yup.string(), 
     year: yup.number(),
-    start_date: yup.date().nullable().default(null),
+    start_date: yup.date().nullable().transform((value) => (isNaN(value) ? null : value)),
     poster_path: yup.string(),
     wallpaper_path: yup.string(),
     tvmaze_id: yup.number().nullable().default(null),
     seasons: yup.number(),
-    finale_year: yup.number().nullable().default(null)
+    finale_year: yup.number().nullable().transform((value) => (isNaN(value) ? null : value))
 });
 
-const AddSeriesLogic = ({ defaultValues, onSubmit, tvMazeSeries }) => {
+const AddSeriesLogic = ({ defaultValues, onSubmit, data }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -37,7 +37,7 @@ const AddSeriesLogic = ({ defaultValues, onSubmit, tvMazeSeries }) => {
       .catch((err) => console.error(err));
   };
 
-  return <AddSeriesView form={form} onSubmit={handleSubmit} tvMazeSeries={tvMazeSeries}/>;
+  return <AddSeriesView form={form} onSubmit={handleSubmit} data={data}/>;
 };
 
 export default AddSeriesLogic;

@@ -1,50 +1,11 @@
 import { getImageURL } from "../../api/tmdb";
-import { getImageItem } from "../ImageListItem";
-import { getTVMazeShows } from "../../api/tmdb";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import './../../App.css'
 
-const buildTVMazeSeries = (series, onClickFunction) => {
-    var seriesInfo = []
-    for (var i=0; i<series.length; i++){
-        const { show } = series[i]
-        const poster = show.image? show.image.medium : "/notAvailable.png"
-        const item = show.id
-        const name = `(${show.id}) ${show.name}`
-        const data = { id: show.id, image: poster, name, icon: 1 }
-        const newItem = { item, data, onClickFunction: onClickFunction }
-        seriesInfo.push(newItem)
-    }
-
-    return seriesInfo
-}
-
-const AddSeriesView = ({ form, onSubmit, data }) => {
+const EditSeriesView = ({ form, onSubmit, data }) => {
     const { formState, register, handleSubmit } = form;
     const { errors, isSubmitting } = formState;
     const { poster_path } = form.control._formValues
     const poster = poster_path? getImageURL(poster_path) : "/notAvailable.png"
-
-    const [tvMazeSeries, setTvMazeSeries] = useState([])
-    const [selectedTvMazeSeriesID, setSelectedTvMazeSeriesID] = useState("")
-    
-    const onChangeTVMazeID = (e) => {
-        setSelectedTvMazeSeriesID(e.target.value)
-    }
-
-    const addTVMazeID = (selectedSeries) => {
-        console.log(selectedSeries)
-        setSelectedTvMazeSeriesID(selectedSeries)
-    }
-
-    useEffect(() => {
-        const url = getTVMazeShows(data.name)
-        axios.get(url).then((response) => {
-        const tvMazeSeries = buildTVMazeSeries(response.data, addTVMazeID)
-        setTvMazeSeries(tvMazeSeries)
-    })
-    }, [data])
 
     return (
         <div>
@@ -100,29 +61,72 @@ const AddSeriesView = ({ form, onSubmit, data }) => {
                 </div>
                 <div>{errors?.start_date?.message}</div>
                 </div>
+
+                <div>
+                <label>Fecha de finalización</label>
+                <div>
+                    <input
+                    type="date"
+                    placeholder="Fecha final"
+                    {...register("finish_date")}
+                    />
+                </div>
+                <div>{errors?.finish_date?.message}</div>
+                </div>
+
+                <div>
+                <label>URL Poster</label>
+                <div>
+                    <input
+                    type="text"
+                    placeholder="URL Poster"
+                    {...register("poster_path")}
+                    />
+                </div>
+                <div>{errors?.poster_path?.message}</div>
+                </div>
+
+                <div>
+                <label>URL Wallpaper</label>
+                <div>
+                    <input
+                    type="text"
+                    placeholder="URL Wallpaper"
+                    {...register("wallpaper_path")}
+                    />
+                </div>
+                <div>{errors?.wallpaper_path?.message}</div>
+                </div>
+
+                <div>
+                <label>Temporadas</label>
+                <div>
+                    <input
+                    type="number"
+                    placeholder="Temporadas"
+                    {...register("seasons")}
+                    />
+                </div>
+                <div>{errors?.seasons?.message}</div>
+                </div>
         
                 <div>
                 <label>TVMaze ID</label>
                 <div>
-                    <input type="number" placeholder="TVMaze ID" {...register("tvmaze_id")} value={selectedTvMazeSeriesID} onChange={onChangeTVMazeID}/>
+                    <input type="number" placeholder="TVMaze ID" {...register("tvmaze_id")}/>
                 </div>
                 <div>{errors?.votes?.message}</div>
                 </div>
         
                 <button disabled={isSubmitting} type="submit">
-                Agregar serie
+                Actualizar serie
                 </button>
             </form>
         </div>
         <br/>
-        Seleccione el show correspondiente de los que salen abajo, ingrese a la caja de texto de TVMaze ID antes de guardar la serie<br/>
-        {tvMazeSeries.map(serie => {
-            return getImageItem(serie)
-
-        })}
         </div>
     );
   };
   
-  export default AddSeriesView;
+  export default EditSeriesView;
   

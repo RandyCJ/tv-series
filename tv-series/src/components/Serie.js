@@ -12,6 +12,7 @@ import { addSeriesCharactersAction, updateLoadedSeriesCharactersAction } from '.
 import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
 import FinishSeriesAPI from './FormFinishSeries/FinishSeriesAPI'
 import { updateLastSeenEpisode } from '../store/actions/series'
+import { useNavigate } from "react-router-dom";
 
 
 const renderNewCharacters = (cast) => {
@@ -119,7 +120,7 @@ const Serie = () => {
     }
 
     const { name, year, start_date, finish_date, last_ep, num_last_ep, last_seen_ep, 
-        poster_path, wallpaper_path, tvmaze_id, seasons, num_last_seen_ep, total_votes } = series.find(serie => serie.id === id)
+        poster_path, wallpaper_path, tvmaze_id, seasons, num_last_seen_ep, total_votes, finale_year } = series.find(serie => serie.id === id)
     const seriesCharacters = charactersJSON.filter(character => character.series_id === id)
     seriesCharacters.sort((a, b) => a.id - b.id);
     seriesCharacters.sort((a, b) => b.votes - a.votes);
@@ -193,9 +194,26 @@ const Serie = () => {
         dispatch(updateLastSeenEpisode({id, last_seen_ep: lastSeenEpisode, num_last_seen_ep: numLastSeenEpisode}))
     }
 
+    const navigate = useNavigate()
+    const onClickUpdateSeries = () => {
+        const currentSeries = {
+            id,
+            name,
+            year,
+            finale_year,
+            start_date,
+            finish_date,
+            poster_path,
+            wallpaper_path,
+            seasons,
+            tvmaze_id
+        }
+        navigate(`/editar_serie/${id}`, {state: {currentSeries}})
+    }
+
     return (
             <div>
-                <h1>{name} ({year})</h1><br/>
+                <h1>{name} ({year}{finale_year? " - " + finale_year : ""})</h1><br/>
                 {
                 wallpaper_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={100}/>
                 }
@@ -205,6 +223,7 @@ const Serie = () => {
                 Último capítulo visto: <input value={lastSeenEpisode} onChange={onChangeLastSeenEpisode} /> <br/>
                 Número último capítulo visto: <input value={numLastSeenEpisode} onChange={onChangeNumLastSeenEpisode} type="number"/> <br/>
                 <input type="button" value="Actualizar ultimos capitulos vistos" onClick={onClickUpdateLastSeenEpisode} /><br/>
+                <input type="button" value="Editar serie" onClick={onClickUpdateSeries} /><br/>
                 <div className='rowC'>
                     <img alt="poster" src={getImageURL(poster_path)} width={400}/>
                     <div>

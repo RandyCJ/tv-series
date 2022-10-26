@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AddSeries from './components/AddSeries';
 import AddSeriesAPI from './components/FormAddSeries/AddSeriesAPI';
+import EditSeriesAPI from './components/FormEditSeries/EditSeriesAPI';
 import MainPage from './components/MainPage';
 import Serie from './components/Serie';
 
@@ -20,6 +21,7 @@ export default class App extends Component {
             <Route path="/series" element={<Series/>} />
             <Route path="/buscar_serie" element={<AddSeries/>} />
             <Route path="/agregar_serie" element={<AddSeriesAPI />} />
+            <Route path="/editar_serie/:id" element={<EditSeriesAPI/>} />
           </Routes>
           
         </Router>    
