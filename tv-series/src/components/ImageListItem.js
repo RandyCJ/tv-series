@@ -28,3 +28,17 @@ export function getImageItem ({ item, data, onClickFunction }) {
         </ImageListItem>
     )
 }
+
+export function getImageItem2 ({ item, data, onClickFunction }) {
+    return (
+        <ImageListItem key={data.id} onClick={() => onClickFunction(item)}>
+                <img
+                    src={`${data.image}?w=248&fit=crop&auto=format`}
+                    srcSet={`${data.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    alt={data.name}
+                    loading="lazy"
+                    style={{cursor:'pointer'}}
+                />
+        </ImageListItem>
+    )
+}

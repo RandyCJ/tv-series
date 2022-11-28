@@ -10,7 +10,7 @@ const EditSeriesFormSchema = yup.object().shape({
     id: yup.number(), 
     name: yup.string(), 
     year: yup.number(),
-    finale_year: yup.number().transform((value) => (isNaN(value) ? null : value)),
+    finale_year: yup.number().transform((value) => (isNaN(value) ? null : value)).nullable(),
     start_date: yup.date().nullable().transform((value) => (isNaN(value) ? null : value)),
     finish_date: yup.date().nullable().transform((value) => (isNaN(value) ? null : value)),
     poster_path: yup.string().nullable(),

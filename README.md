@@ -2,7 +2,7 @@
 
 Personal project to store information about the tv series I watch and its statistics.
 This project is inspired by the [TV TIME](https://www.tvtime.com/) application, where you can keep track of the shows you are watching and the ones you will. Additionaly I wanted to know statistics about the shows like how many episodes I am watching per day, how many day took me to watch all episodes, or how many times I choose a character as my favorite in one episode over the episodes.  
-I took the series, characters and actor pictures from [themoviedb.org](themoviedb.org) and [tvmaze.com](tvmaze.com).  
+I took the series, characters and actor pictures from [The Movie Database](https://themoviedb.org) and [TV Maze](https://tvmaze.com).  
 Yeah, I love TV Series and statistics, so I decided to make this project.
 
 WIP: A better-loking web interface, and incorporate statistics (currenty using the Python file in the root path for statistics, that was the one used before for store the tv series in the DB).

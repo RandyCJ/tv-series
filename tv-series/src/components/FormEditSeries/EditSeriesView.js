@@ -1,17 +1,78 @@
-import { getImageURL } from "../../api/tmdb";
+import { getImageURL, getSeriesImagesURL } from "../../api/tmdb";
+import { useState } from "react";
+import { getImageItem2 } from '../ImageListItem';
+import ImageList from '@mui/material/ImageList';
 import './../../App.css'
+import axios from "axios";
+
+const renderSeriesPosters = (seriesPosters) => {
+    return (
+        <ImageList cols={5} sx={{ width: 1000}}>
+            {seriesPosters.map((poster) => getImageItem2(poster))}
+        </ImageList>
+    )
+}
+
+const buildSeriesPosters = (posters, onClickFunction) => {
+    var seriesPosters = []
+    for (var i=0; i<posters.length; i++){
+        const poster = posters[i].file_path
+        const item = poster
+        const name = ""
+        const data = { id: item, image: getImageURL(poster), name }
+        const newItem = { item, data, onClickFunction: onClickFunction }
+        seriesPosters.push(newItem)
+    }
+    return seriesPosters
+}
 
 const EditSeriesView = ({ form, onSubmit, data }) => {
     const { formState, register, handleSubmit } = form;
     const { errors, isSubmitting } = formState;
     const { poster_path } = form.control._formValues
-    const poster = poster_path? getImageURL(poster_path) : "/notAvailable.png"
+    const [poster, setPoster] = useState(poster_path? getImageURL(poster_path) : "/notAvailable.png")
+
+    const [showSeriesPosters, setShowSeriesPosters] = useState(true)
+    const [seriesPosters, setSeriesPosters] = useState([])
+
+    const [selectedSeriesPoster, setSelectedSeriesPoster] = useState(poster_path)
+
+    const onChangeSeriesPoster = (e) => {
+        setSelectedSeriesPoster(e.target.value)
+    }
+
+    const addSeriesPosterURL = (selectedPosterURL) => {
+        setSelectedSeriesPoster(selectedPosterURL)
+        setPoster(getImageURL(selectedPosterURL))
+    }
+
+    const loadSeriesPosters = async (seriesID) => {
+        const url = getSeriesImagesURL(seriesID)
+        const { data } = await axios.get(url)
+        const posters = buildSeriesPosters(data.posters, addSeriesPosterURL)
+        setSeriesPosters(posters)
+        setShowSeriesPosters(true)
+    }
+
+    const showPosters = () => {
+        setShowSeriesPosters(true)
+        if (seriesPosters.length === 0){
+            loadSeriesPosters(data.id)
+        }
+    }
+
+    const hidePosters = () => {
+        setShowSeriesPosters(false)
+    }
+
 
     return (
         <div>
         <div className="rowC">
             <div>
-                { <img alt="poster" src={poster} width={200} /> }
+                { <img alt="poster" src={poster} width={230} /> } <br />
+                <input type="button" value="Cambiar poster" onClick={showPosters} />
+                <input type="button" value="Ocultar posters" onClick={hidePosters} />
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -81,6 +142,8 @@ const EditSeriesView = ({ form, onSubmit, data }) => {
                     type="text"
                     placeholder="URL Poster"
                     {...register("poster_path")}
+                    value={selectedSeriesPoster}
+                    onChange={onChangeSeriesPoster}
                     />
                 </div>
                 <div>{errors?.poster_path?.message}</div>
@@ -124,6 +187,9 @@ const EditSeriesView = ({ form, onSubmit, data }) => {
             </form>
         </div>
         <br/>
+        {
+            showSeriesPosters && renderSeriesPosters(seriesPosters)
+        }
         </div>
     );
   };
