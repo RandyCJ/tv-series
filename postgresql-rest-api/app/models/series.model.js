@@ -31,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
       wallpaper_path: {
         type: Sequelize.STRING
       },
-      tvmaze_id: {
+      thetvdb_id: {
         type: Sequelize.INTEGER
       },
       seasons: {

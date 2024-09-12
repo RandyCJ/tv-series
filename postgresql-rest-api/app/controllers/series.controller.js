@@ -20,7 +20,7 @@ exports.create = (req, res) => {
     start_date: req.body.start_date,
     poster_path: req.body.poster_path,
     wallpaper_path: req.body.wallpaper_path,
-    tvmaze_id: req.body.tvmaze_id,
+    thetvdb_id: req.body.thetvdb_id,
     seasons: req.body.seasons,
     finale_year: req.body.finale_year
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { getImageURL, getTVMazeCharacters, getCharactersBySeason } from '../api/tmdb'
+import { getImageURL, getExtendedSeriesInformation, getCharactersBySeason, config } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
 import { PaginatedList } from 'react-paginated-list'
@@ -23,18 +23,19 @@ const renderNewCharacters = (cast) => {
     )
 }
 
-const getTVMazeCharactersData = (charactersData, series_id, onClickFunction) => {
+const getTheTVDBCharactersData = (charactersDataFull, series_id, onClickFunction) => {
+    const charactersData = charactersDataFull.data.characters
     var charactersInfo = []
     for (var i=0; i<charactersData.length; i++){
-        const { person, character } = charactersData[i]
-        const actor_photo = character.image? character.image.medium : 
-                            person.image? person.image.medium : "/notAvailable.png"
-        const item = { series_id, actor_id: person.id, name: character.name, 
-                        gender: person.gender === "Female"? 1 : person.gender === "Male"? 2 : 0, 
-                        actor: person.name, profile_path: person.image? person.image.medium : null, 
-                        character_path: character.image? character.image.medium : null, votes: 1, 
+        const { id, name, peopleId, image, personImgURL, personName } = charactersData[i]
+        const actor_photo = image? image : 
+                            personImgURL? personImgURL : "/notAvailable.png"
+        const item = { series_id, actor_id: peopleId, name, 
+                        gender: 0, 
+                        actor: personName, profile_path: personImgURL? personImgURL : null, 
+                        character_path: image? image : null, votes: 1, 
                         api_data: 2 }
-        const data = { id: character.id, image: actor_photo, name: character.name, icon: 1 }
+        const data = { id, image: actor_photo, name, icon: 1 }
         const newItem = { item, data, onClickFunction: onClickFunction }
         charactersInfo.push(newItem)
     }
@@ -72,8 +73,8 @@ const Serie = () => {
     const [showTMDBNewCharacters, setShowTMDBNewCharacters] = useState(true)
     const [newTMDBCharacters, setNewTMDBCharacters] = useState([])
 
-    const [showTVMazeNewCharacters, setShowTVMazeNewCharacters] = useState(true)
-    const [newTVMazeCharacters, setNewTVMazeCharacters] = useState([])
+    const [showTheTVDBNewCharacters, setShowTheTVDBNewCharacters] = useState(true)
+    const [newTheTVDBCharacters, setNewTheTVDBCharacters] = useState([])
 
     const [seasonCharacters, setSeasonCharacters] = useState("0")
     const [loadedSeasonCharacters, setLoadedSeasonCharacters] = useState("0")
@@ -120,7 +121,7 @@ const Serie = () => {
     }
 
     const { name, year, start_date, finish_date, last_ep, num_last_ep, last_seen_ep, 
-        poster_path, wallpaper_path, tvmaze_id, seasons, num_last_seen_ep, total_votes, finale_year } = series.find(serie => serie.id === id)
+        poster_path, wallpaper_path, thetvdb_id, seasons, num_last_seen_ep, total_votes, finale_year } = series.find(serie => serie.id === id)
     const seriesCharacters = charactersJSON.filter(character => character.series_id === id)
     seriesCharacters.sort((a, b) => a.id - b.id);
     seriesCharacters.sort((a, b) => b.votes - a.votes);
@@ -152,7 +153,7 @@ const Serie = () => {
         )
     }
 
-    const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
+    const loadNewCharacters2 = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
         const url = urlFunction(seriesID, 
             seasonCharacters === "" ? "0" : 
             parseInt(seasonCharacters) > seasons ? seasons.toString() : 
@@ -163,27 +164,36 @@ const Serie = () => {
         stateFunction2(true)
     }
 
-    const showHideNewTVMazeCharacters = () => {
-        setShowTVMazeNewCharacters(true)
-        if (newTVMazeCharacters.length === 0){
-            loadNewCharacters(tvmaze_id, getTVMazeCharacters, 
-                getTVMazeCharactersData, setNewTVMazeCharacters, 
-                setShowTVMazeNewCharacters)
+    const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
+        const url = urlFunction(seriesID)
+        const { data } = await axios.get(url, config)
+        const cast = getCharactersFunction(data, id, addCharacter)
+        stateFunction1(cast)
+        stateFunction2(true)
+    }
+
+
+    const showHideNewTheTVDBCharacters = () => {
+        setShowTheTVDBNewCharacters(true)
+        if (newTheTVDBCharacters.length === 0){
+            loadNewCharacters(thetvdb_id, getExtendedSeriesInformation, 
+                getTheTVDBCharactersData, setNewTheTVDBCharacters, 
+                setShowTheTVDBNewCharacters)
         }
     }
 
     const showHideNewTMDBCharacters = () => {
         setShowTMDBNewCharacters(true)
         if (newTMDBCharacters.length === 0 || loadedSeasonCharacters !== seasonCharacters){
-            loadNewCharacters(id, getCharactersBySeason, 
+            loadNewCharacters2(id, getCharactersBySeason, 
                 getTMDBCharactersData, setNewTMDBCharacters, 
                 setShowTMDBNewCharacters)
             setLoadedSeasonCharacters(seasonCharacters)
         }
     }
 
-    const toggleShowTVMaze = () => {
-        setShowTVMazeNewCharacters(false)
+    const toggleShowTheTVDB = () => {
+        setShowTheTVDBNewCharacters(false)
     }
 
     const toggleShowTMDB = () => {
@@ -206,7 +216,7 @@ const Serie = () => {
             poster_path,
             wallpaper_path,
             seasons,
-            tvmaze_id
+            thetvdb_id
         }
         navigate(`/editar_serie/${id}`, {state: {currentSeries}})
     }
@@ -240,8 +250,8 @@ const Serie = () => {
                     showFinishDateForm && <UpdateSeriesContext.Provider value={{ id, setShowFinishDateForm, setLastSeenEpisode, setNumLastSeenEpisode }}><FinishSeriesAPI /></UpdateSeriesContext.Provider>
                 }
 
-                <input type="button" value="Agregar personaje (TVMaze)" onClick={showHideNewTVMazeCharacters} />
-                <input type="button" value="Ocultar personajes (TVMaze)" onClick={toggleShowTVMaze} /><br/>
+                <input type="button" value="Agregar personaje (TheTVDB)" onClick={showHideNewTheTVDBCharacters} />
+                <input type="button" value="Ocultar personajes (TheTVDB)" onClick={toggleShowTheTVDB} /><br/>
                 <input type="number" placeholder='Temporada' min="0" max={seasons} value={seasonCharacters} onChange={setSeason} />
                 <input type="button" value="Agregar personaje (TMDB)" onClick={showHideNewTMDBCharacters} />
                 <input type="button" value="Ocultar personajes (TMDB)" onClick={toggleShowTMDB} />
@@ -249,7 +259,7 @@ const Serie = () => {
                     showAddCharacterForm && <NewCharacterContext.Provider value={{ setShowAddCharacterForm, characterToAdd, isCharacterFromScratch }}><AddCharacterAPI /></NewCharacterContext.Provider>
                 }
                 {
-                    showTVMazeNewCharacters && renderNewCharacters(newTVMazeCharacters)
+                    showTheTVDBNewCharacters && renderNewCharacters(newTheTVDBCharacters)
                 }
                 {
                     showTMDBNewCharacters && renderNewCharacters(newTMDBCharacters)

@@ -174,9 +174,9 @@ const EditSeriesView = ({ form, onSubmit, data }) => {
                 </div>
         
                 <div>
-                <label>TVMaze ID</label>
+                <label>TheTVDB ID</label>
                 <div>
-                    <input type="number" placeholder="TVMaze ID" {...register("tvmaze_id")}/>
+                    <input type="number" placeholder="TVDB ID" {...register("thetvdb_id")}/>
                 </div>
                 <div>{errors?.votes?.message}</div>
                 </div>

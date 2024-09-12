@@ -15,7 +15,7 @@ const EditSeriesFormSchema = yup.object().shape({
     finish_date: yup.date().nullable().transform((value) => (isNaN(value) ? null : value)),
     poster_path: yup.string().nullable(),
     wallpaper_path: yup.string().nullable(),
-    tvmaze_id: yup.number().nullable().default(null),
+    thetvdb_id: yup.number().nullable().default(null),
     seasons: yup.number()
 });
 

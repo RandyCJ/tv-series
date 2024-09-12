@@ -21,7 +21,7 @@ const EditSeriesAPI = () => {
         poster_path: data?.poster_path?? null,
         wallpaper_path: data?.wallpaper_path?? null,
         seasons: data.seasons,
-        tvmaze_id: data.tvmaze_id?? null
+        thetvdb_id: data.thetvdb_id?? null
     }
 
     return (

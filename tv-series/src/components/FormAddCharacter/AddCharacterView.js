@@ -47,7 +47,7 @@ const AddCharacterView = ({ form, onSubmit, setShowAddCharacterForm, isCharacter
         <div>{errors?.actor_id?.message}</div>
       </div>
 
-      <div hidden={!isCharacterFromScratch}>
+      <div>
         <label>Género</label>
         <div>
           <select {...register("gender")}>
