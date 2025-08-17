@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { getImageURL, getExtendedSeriesInformation, getCharactersBySeason, config } from '../api/tmdb'
+import { getImageURL, getExtendedSeriesInformation, getCharactersBySeason, getTVDBToken } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
 import { PaginatedList } from 'react-paginated-list'
@@ -166,6 +166,12 @@ const Serie = () => {
 
     const loadNewCharacters = async (seriesID, urlFunction, getCharactersFunction, stateFunction1, stateFunction2) => {
         const url = urlFunction(seriesID)
+        const bearerToken = await getTVDBToken()
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${bearerToken}`
+            }
+        }
         const { data } = await axios.get(url, config)
         const cast = getCharactersFunction(data, id, addCharacter)
         stateFunction1(cast)

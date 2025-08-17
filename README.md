@@ -29,14 +29,16 @@ module.exports = {
   };
 ```
 
-Then in the path `\tv-series\tv-series\src\api` create a `conf.json` file with this structure and your API KEY to [TheMovieDatabase](https://www.themoviedb.org/documentation/api).
+Then create a .env file in `\tv-series` with the following properties, including your API KEY to [TheMovieDatabase](https://www.themoviedb.org/documentation/api). (Free API)
 
-```json
-{
-    "api_key": "API_KEY"
-}
+To use TheTVDB you have to pay a suscription
+
+
 ```
-
+REACT_APP_TVDB_API_KEY=your_thetvdb_api_key
+REACT_APP_TVDB_PIN=your_thetvdb_pin
+REACT_APP_TMDB_API_KEY=your_tmdb_api_key
+```
 
 Then go to the root folder of the project and type the following commands.
 
