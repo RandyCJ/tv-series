@@ -3,6 +3,13 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import AddIcon from '@mui/icons-material/Add';
+import {
+    Grid,
+    Card,
+    CardContent,
+    Typography,
+    Box
+} from "@mui/material";
 
 export function getImageItem ({ item, data, onClickFunction }) {
     return (
@@ -40,5 +47,49 @@ export function getImageItem2 ({ item, data, onClickFunction }) {
                     style={{cursor:'pointer'}}
                 />
         </ImageListItem>
+    )
+}
+
+export function getImageCard ({ item, data, onClickFunction }) {
+    return (
+        <Grid item xs={6} sm={4} md={3} lg={2} key={data.id}>
+            <Card
+                onClick={() => onClickFunction(item)}
+                sx={{
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
+                    transition: "transform 0.3s ease",
+                    cursor: "pointer",
+                    "&:hover": { transform: "scale(1.05)" },
+                }}
+            >
+                <Box
+                    sx={{
+                    width: "100%",
+                    aspectRatio: "2 / 3",
+                    backgroundColor: "#000",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                    }}
+                >
+                    <img
+                        src={data.image}
+                        alt={data.name}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover" 
+                        }}
+                    />
+                </Box>
+                <CardContent sx={{ textAlign: "center", p: 1 }}>
+                    <Typography variant="subtitle2" noWrap>
+                        {data.name}
+                    </Typography>
+                </CardContent>
+            </Card>
+      </Grid>
     )
 }

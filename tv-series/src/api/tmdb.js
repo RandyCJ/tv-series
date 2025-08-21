@@ -1,5 +1,6 @@
 const mainTMDBURL = "https://api.themoviedb.org/3"
-const mainImageTMDBURL = "https://image.tmdb.org/t/p/original"
+const mainImageTMDBURL = "https://image.tmdb.org/t/p/w500"
+const mainImageTMDBURLOriginal = "https://image.tmdb.org/t/p/original"
 const mainTVMazeURL = "http://api.tvmaze.com"
 const mainTheTVDBURL = "https://api4.thetvdb.com/v4"
 const TMDBApiKey = process.env.REACT_APP_TMDB_API_KEY
@@ -8,6 +9,10 @@ export const getPossibleSeries = ( title, year ) => `${mainTMDBURL}/search/tv?ap
 export const getImageURL = (posterPath) => {
     if (posterPath === "/notAvailable.png") return posterPath
     return posterPath.charAt(0) === '/' ? `${mainImageTMDBURL}${posterPath}` : posterPath
+}
+
+export const getWallpaperURL = (wallpaperPath) => {
+    return wallpaperPath.charAt(0) === '/' ? `${mainImageTMDBURLOriginal}${wallpaperPath}` : wallpaperPath
 }
 
 export const getCharactersBySeason = (seriesID, season) => {

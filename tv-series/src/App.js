@@ -23,7 +23,6 @@ export default class App extends Component {
             <Route path="/agregar_serie" element={<AddSeriesAPI />} />
             <Route path="/editar_serie/:id" element={<EditSeriesAPI/>} />
           </Routes>
-          
         </Router>    
       </div>
     )

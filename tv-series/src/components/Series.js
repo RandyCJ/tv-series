@@ -1,10 +1,10 @@
-import React from 'react'
 import { Link } from 'react-router-dom';
 import { getImageURL } from '../api/tmdb';
 import { useNavigate } from "react-router-dom";
 
-import ImageList from '@mui/material/ImageList';
-import { getImageItem } from './ImageListItem';
+import { Grid } from "@mui/material";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { getImageCard } from './ImageListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { switchFilteredSeriesAction, switchUnfinishedSeriesAction } from '../store/actions/series';
 
@@ -35,21 +35,31 @@ const Series = () =>  {
         <>
             <Link to="/">Pagina principal</Link>
             <br/>
-            <div>
-                <label>Series que estoy viendo</label>  <input checked={filteredSeries} type="checkbox" onChange={changeSeries} />
-                <label>Series no finalizadas</label>  <input checked={unfinishedSeries} type="checkbox" onChange={changeToUnfinishedSeries} />
-            </div>
-            <ImageList cols={7} sx={{ width: 1000}}>
+
+            <FormGroup row>
+                <FormControlLabel
+                    control={<Checkbox checked={filteredSeries} onChange={changeSeries} />}
+                    label="Series que estoy viendo"
+                />
+                <FormControlLabel
+                    control={<Checkbox checked={unfinishedSeries} onChange={changeToUnfinishedSeries} />}
+                    label="Series no finalizadas"
+                />
+            </FormGroup>
+
+            <br/>
+
+            <Grid container spacing={2} justifyContent="left">
             { 
             currentList.map((item) => {
                 const poster = item.poster_path? getImageURL(item.poster_path) : "/notAvailable.png"
                 const data = { id: item.id, image: poster, name: item.name, icon: 0 }
                 return (
-                    getImageItem({item, data, onClickFunction: onClickSeries})
+                    getImageCard({item, data, onClickFunction: onClickSeries})
                 )
             })
             }
-            </ImageList>
+            </Grid>
         </>
     );
 

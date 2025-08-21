@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext } from 'react'
+import { useState, useEffect, createContext, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { getImageURL, getExtendedSeriesInformation, getCharactersBySeason, getTVDBToken } from '../api/tmdb'
+import { getImageURL, getWallpaperURL, getExtendedSeriesInformation, getCharactersBySeason, getTVDBToken } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
 import { PaginatedList } from 'react-paginated-list'
@@ -13,6 +13,7 @@ import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
 import FinishSeriesAPI from './FormFinishSeries/FinishSeriesAPI'
 import { updateLastSeenEpisode } from '../store/actions/series'
 import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button } from "@mui/material";
 
 
 const renderNewCharacters = (cast) => {
@@ -139,17 +140,20 @@ const Serie = () => {
 
     const renderCharacters = (characters) => {
         return (
-        <div>
-            {
-                characters.map((currentCharacter) => {
-                    return (
-                        <div key={currentCharacter.id}>
-                            <Character character={currentCharacter} seriesID={id}/>
-                        </div>
-                    )
-                })
-            }
-        </div>
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 2,
+                    overflow: "hidden",
+                    justifyContent: "left",
+                }}
+            >
+              {
+                characters.map((currentCharacter) => (
+                    <Character character={currentCharacter} seriesID={id}/>
+                ))
+              }
+            </Box>
         )
     }
 
@@ -227,30 +231,207 @@ const Serie = () => {
         navigate(`/editar_serie/${id}`, {state: {currentSeries}})
     }
 
+    // Lógica para ajustar cantidad de personajes de acuerdo a ancho de la pantalla
+    const containerRef = useRef(null);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+            const width = entry.contentRect.width;
+            const cardWidth = 160;
+            const newItems = Math.floor(width / cardWidth);
+
+            setItemsPerPage(newItems > 0 ? newItems : 1);
+        }
+        });
+
+        observer.observe(containerRef.current);
+
+        return () => {
+            if (containerRef.current) observer.unobserve(containerRef.current);
+        };
+    }, []);
+
     return (
             <div>
-                <h1>{name} ({year}{finale_year? " - " + finale_year : ""})</h1><br/>
-                {
-                wallpaper_path && <img alt="wallpaper" src={getImageURL(wallpaper_path)} width={100}/>
-                }
-                <br/>Fecha inicio: {start_date}<br/>
-                Fecha final: { finish_date?? "No terminada"}<br/>
-                { finish_date? `Último capítulo emitido al ponerse al día: ${last_ep} (${num_last_ep})` : "" }<br/>
-                Último capítulo visto: <input value={lastSeenEpisode} onChange={onChangeLastSeenEpisode} /> <br/>
-                Número último capítulo visto: <input value={numLastSeenEpisode} onChange={onChangeNumLastSeenEpisode} type="number"/> <br/>
-                <input type="button" value="Actualizar ultimos capitulos vistos" onClick={onClickUpdateLastSeenEpisode} /><br/>
-                <input type="button" value="Editar serie" onClick={onClickUpdateSeries} /><br/>
-                <div className='rowC'>
-                    <img alt="poster" src={getImageURL(poster_path)} width={400}/>
-                    <div>
-                        <h3>Personajes (votos totales: {total_votes})</h3><br/>
-                        <PaginatedList
-                            list={seriesCharacters}
-                            itemsPerPage={3}
-                            renderList={renderCharacters}
+                <Box>
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: "100%",
+                            aspectRatio: "16/9",
+                            borderRadius: "12px",
+                            mb: 4,
+                            overflow: "hidden",
+                        }}
+                    >
+                        <Box // Contiene wallpaper
+                            component="img"
+                            src={getWallpaperURL(wallpaper_path)}
+                            alt="wallpaper"
+                            sx={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                            }}
                         />
-                    </div>
-                </div>
+
+                        <Box // Oscurece wallpaper
+                            sx={{
+                                position: "absolute",
+                                inset: 0,
+                                background: "rgba(0,0,0,0.45)",
+                            }}
+                        />
+
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                inset: 0,
+                                display: "flex",
+                                flexDirection: "column",
+                                height: "100%",
+                                px: 4,
+                                color: "white",
+                            }}
+                        >
+        
+                            <Box // Poster + Info
+                                sx={{
+                                    flex: "0 0 40%", 
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "flex-start",
+                                    gap: 4,
+                                    mt: "2%",
+                                }}
+                            >
+                                <Box // Poster
+                                    component="img"
+                                    src={getImageURL(poster_path)}
+                                    alt="poster"
+                                    sx={{
+                                        width: "100%",
+                                        maxWidth: 220,
+                                        borderRadius: "12px",
+                                        boxShadow: "0 6px 20px rgba(0,0,0,0.7)",
+                                    }}
+                                />
+
+                                <Box //Titulo de la serie, fechas e inputs
+                                >
+                                    <Typography
+                                        variant="h3"
+                                        fontWeight="bold"
+                                        gutterBottom
+                                        sx={{
+                                            textShadow: `
+                                            -2px -2px 0 #000,  
+                                            2px -2px 0 #000,
+                                            -2px 2px 0 #000,
+                                            2px 2px 0 #000
+                                            `,
+                                        }}
+                                    >
+                                        {name} ({year}{finale_year ? " - " + finale_year : ""})
+                                    </Typography>
+
+                                    <Typography variant="body1" sx={{ textShadow: "1px 1px 3px black" }}>
+                                        Fecha inicio: {start_date}
+                                    </Typography>
+
+                                    <Typography variant="body1" sx={{ textShadow: "1px 1px 3px black" }}>
+                                        Fecha final: {finish_date ?? "No terminada"}
+                                    </Typography>
+
+                                    {finish_date && (
+                                    <Typography
+                                        variant="body1"
+                                        sx={{ textShadow: "1px 1px 3px black" }}
+                                    >
+                                        Último capítulo emitido: {last_ep} ({num_last_ep})
+                                    </Typography>
+                                    )}
+
+                                    <Box mt={2}>
+                                        <Typography
+                                            variant="body2"
+                                            fontWeight="bold"
+                                            sx={{ textShadow: "1px 1px 2px black" }}
+                                        >
+                                            Último capítulo visto:
+                                        </Typography>
+                                        <input
+                                            value={lastSeenEpisode}
+                                            onChange={onChangeLastSeenEpisode}
+                                        />
+                                        <br />
+                                        <Typography
+                                            variant="body2"
+                                            fontWeight="bold"
+                                            sx={{ textShadow: "1px 1px 2px black" }}
+                                        >
+                                            Número último capítulo visto:
+                                        </Typography>
+                                        <input
+                                            type="number"
+                                            value={numLastSeenEpisode}
+                                            onChange={onChangeNumLastSeenEpisode}
+                                        />
+                                        <br />
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={onClickUpdateLastSeenEpisode}
+                                            sx={{ mt: 2, mr: 1 }}
+                                        >
+                                            Actualizar capítulos
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            color="inherit"
+                                            onClick={onClickUpdateSeries}
+                                            sx={{ mt: 2 }}
+                                        >
+                                            Editar serie
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                            <Box // Personajes
+                                ref={containerRef}
+                                sx={{
+                                    flex: "0 0 40%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "left",
+                                    mt: 2,
+                                }}
+                            >
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    mb: 1,
+                                    textShadow: "2px 2px 4px black",
+                                }}
+                            >
+                                Personajes (votos totales: {total_votes})
+                            </Typography>
+
+                            <PaginatedList
+                                list={seriesCharacters}
+                                itemsPerPage={itemsPerPage}
+                                renderList={renderCharacters}
+                            />
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+
                 <input type="button" value="Marcar como finalizado" onClick={onClickShowFinishSeriesForm} /><input type="button" value="Agregar personaje" onClick={addCharacterFromScratch}/><br />
                 {
                     showFinishDateForm && <UpdateSeriesContext.Provider value={{ id, setShowFinishDateForm, setLastSeenEpisode, setNumLastSeenEpisode }}><FinishSeriesAPI /></UpdateSeriesContext.Provider>
