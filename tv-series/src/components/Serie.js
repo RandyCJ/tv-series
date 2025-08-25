@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom'
 import { getImageURL, getWallpaperURL, getExtendedSeriesInformation, getCharactersBySeason, getTVDBToken } from '../api/tmdb'
 import './../App.css'
 import Character from './Character'
-import { PaginatedList } from 'react-paginated-list'
 import axios from 'axios'
 import ImageList from '@mui/material/ImageList';
-import { getImageItem } from './ImageListItem';
+import { getImageItem, getNewCharacterCard } from './ImageListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSeriesCharactersAction, updateLoadedSeriesCharactersAction } from '../store/actions/characters'
 import AddCharacterAPI from './FormAddCharacter/AddCharacterAPI'
@@ -14,12 +13,12 @@ import FinishSeriesAPI from './FormFinishSeries/FinishSeriesAPI'
 import { updateLastSeenEpisode } from '../store/actions/series'
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
-
+import CharacterCarousel from './CharacterCarousel'
 
 const renderNewCharacters = (cast) => {
     return (
         <ImageList cols={6} sx={{ width: 1000}}>
-            {cast.map((characterInfo) => getImageItem(characterInfo))}
+            {cast.map((characterInfo) => getNewCharacterCard(characterInfo))}
         </ImageList>
     )
 }
@@ -150,7 +149,7 @@ const Serie = () => {
             >
               {
                 characters.map((currentCharacter) => (
-                    <Character character={currentCharacter} seriesID={id}/>
+                    <Character character={currentCharacter} seriesID={id} key={currentCharacter.id}/>
                 ))
               }
             </Box>
@@ -422,11 +421,8 @@ const Serie = () => {
                                 Personajes (votos totales: {total_votes})
                             </Typography>
 
-                            <PaginatedList
-                                list={seriesCharacters}
-                                itemsPerPage={itemsPerPage}
-                                renderList={renderCharacters}
-                            />
+                            <CharacterCarousel seriesCharacters={seriesCharacters} itemsPerPage={itemsPerPage} seriesId={id} />
+
                             </Box>
                         </Box>
                     </Box>

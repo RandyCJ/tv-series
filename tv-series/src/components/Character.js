@@ -4,12 +4,7 @@ import { getImageURL } from "../api/tmdb";
 import { addVotesToCharacterAction, deleteCharacterAction, substractVotesToCharacterAction } from "../store/actions/characters";
 import { useDispatch } from 'react-redux';
 import { Box, Typography, Button } from "@mui/material";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  TextField
-} from "@mui/material";
+import { Card, CardContent, CardMedia, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 
 const Character = ({ character, seriesID }) => {
     const { id, name, actor, votes, profile_path, character_path, gender } = character
@@ -31,9 +26,15 @@ const Character = ({ character, seriesID }) => {
         dispatch(substractVotesToCharacterAction(id, parseInt(newVotes), seriesID))
     }
 
-    const deleteCharacter = () => {
+    const [open, setOpen] = useState(false)
+
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+
+    const handleConfirmDelete = () => {
         dispatch(deleteCharacterAction(id, votes, seriesID))
-    }
+        handleClose()
+    };
 
     return (
         <Card
@@ -145,12 +146,32 @@ const Character = ({ character, seriesID }) => {
                         color="error"
                         fullWidth
                         sx={{ minWidth: 28, p: 0 }}
-                        onClick={deleteCharacter}
+                        onClick={handleOpen}
                     >
                           Eliminar  
                     </Button>
                 </Box>
             </CardContent>
+
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Confirmar eliminación</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        ¿Seguro que quieres eliminar al personaje <strong>{name}</strong>?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancelar</Button>
+                    <Button
+                        onClick={handleConfirmDelete}
+                        color="error"
+                        variant="contained"
+                    >
+                        Eliminar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </Card>
     )
 }

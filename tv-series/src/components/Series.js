@@ -50,15 +50,15 @@ const Series = () =>  {
             <br/>
 
             <Grid container spacing={2} justifyContent="left">
-            { 
-            currentList.map((item) => {
-                const poster = item.poster_path? getImageURL(item.poster_path) : "/notAvailable.png"
-                const data = { id: item.id, image: poster, name: item.name, icon: 0 }
-                return (
-                    getImageCard({item, data, onClickFunction: onClickSeries})
-                )
-            })
-            }
+                { 
+                currentList.map((item) => {
+                    const poster = item.poster_path? getImageURL(item.poster_path) : "/notAvailable.png"
+                    const data = { id: item.id, image: poster, name: item.name, icon: 0 }
+                    return (
+                        getImageCard({item, data, onClickFunction: onClickSeries})
+                    )
+                })
+                }
             </Grid>
         </>
     );

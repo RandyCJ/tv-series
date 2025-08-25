@@ -3,13 +3,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import AddIcon from '@mui/icons-material/Add';
-import {
-    Grid,
-    Card,
-    CardContent,
-    Typography,
-    Box
-} from "@mui/material";
+import { Grid, Card, CardContent, Typography, Box, CardMedia } from "@mui/material";
 
 export function getImageItem ({ item, data, onClickFunction }) {
     return (
@@ -91,5 +85,53 @@ export function getImageCard ({ item, data, onClickFunction }) {
                 </CardContent>
             </Card>
       </Grid>
+    )
+}
+
+export function getNewCharacterCard ({ item, data, onClickFunction }) {
+    return (
+        <Card onClick={() => onClickFunction(item)}
+            key={data.id}
+            sx={{
+                width: 140,
+                flexShrink: 0,
+                borderRadius: "10px",
+                overflow: "hidden",
+                background: "rgba(0,0,0,0.7)",
+                color: "white",
+            }}
+        >
+            <CardMedia
+                component="img"
+                height="180"
+                image={data.image}
+                alt={data.name}
+                sx={{
+                    objectFit: "cover",
+                }}
+            />
+            <CardContent sx={{ p: 1 }}>
+                <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    noWrap
+                    sx={{
+                        textShadow: "1px 1px 3px black",
+                    }}
+                >
+                    {data.name}
+                </Typography>
+                <Typography
+                    variant="caption"
+                    color="gray"
+                    noWrap
+                    sx={{
+                        fontStyle: "italic",
+                    }}
+                >
+                {item.actor}
+                </Typography>
+            </CardContent>
+        </Card>
     )
 }
